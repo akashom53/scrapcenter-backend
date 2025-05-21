@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -46,7 +46,7 @@ export class AuthService {
    * @param password User's password
    * @returns Observable with login response containing access token
    */
-  login(email: string, password: string): Observable<LoginResponse> {
+  login(email: string, password: string, shouldRedirect = true): Observable<LoginResponse> {
     // Validate inputs
     if (!email || !this.isValidEmail(email)) {
       return throwError(() => new Error('Please enter a valid email address'));
@@ -58,7 +58,7 @@ export class AuthService {
 
     const loginData: LoginRequest = { email, password };
 
-    return this.apiService.post<LoginResponse>(`${this.AUTH_ENDPOINT}/login`, loginData)
+    return this.apiService.post<LoginResponse>(`${this.AUTH_ENDPOINT}/login`, loginData, shouldRedirect)
       .pipe(
         tap(response => {
           // Store token in localStorage or a token service
@@ -136,5 +136,27 @@ export class AuthService {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
+  }
+
+  /**
+   * Validates the current authentication token
+   * @param redirectOnFailure Whether to redirect to login page on validation failure
+   * @returns Observable with validation status
+   */
+  validateToken(redirectOnFailure: boolean = true): Observable<boolean> {
+    return this.apiService.get<{ status: string }>(`${this.AUTH_ENDPOINT}/validatetoken`,
+      true, redirectOnFailure
+    ).pipe(
+      map((response: { status: string }) => response.status === 'ok'),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Token validation failed:', error);
+        return of(false);
+      })
+    );
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    window.location.reload();
   }
 }

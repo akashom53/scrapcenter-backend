@@ -1,0 +1,314 @@
+/* Main container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    max-height: 100vh;
+    background-color: transparent;
+    /* Removed black background */
+    padding: 0;
+    /* Removed padding */
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+/* Login card */
+.login-card {
+    display: flex;
+    width: 100vw;
+    /* Full viewport width */
+    height: 100vh;
+    /* Full viewport height */
+    max-width: none;
+    /* Remove max-width constraint */
+    border-radius: 0;
+    /* Remove border radius for full screen */
+    overflow: hidden;
+    box-shadow: none;
+    /* Remove shadow */
+}
+
+/* Left panel with image */
+.left-panel {
+    flex: 1;
+    background-image: url('https://fastly.picsum.photos/id/24/4855/1803.jpg?hmac=ICVhP1pUXDLXaTkgwDJinSUS59UWalMxf4SOIWb9Ui4');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+}
+
+/* Gradient overlay for better text visibility */
+.left-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+    z-index: 1;
+}
+
+/* Quote section */
+.quote-section {
+    position: relative;
+    z-index: 2;
+}
+
+.quote-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.headline {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.quote-text {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 80%;
+}
+
+/* Right panel */
+.right-panel {
+    flex: 1;
+    background-color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Add scrolling for smaller screens */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-card {
+        flex-direction: column;
+    }
+
+    .left-panel {
+        display: none;
+    }
+
+    .right-panel {
+        padding: 30px 20px;
+    }
+}
+
+/* Logo section */
+.logo-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+}
+
+.logo {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Login form */
+.login-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.welcome-text {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.login-description {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+/* Form elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #000;
+    outline: none;
+}
+
+/* Password input with eye icon */
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+}
+
+/* Form options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 8px;
+}
+
+.forgot-password {
+    color: #666;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.sign-in-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.sign-in-btn:hover {
+    background-color: #333;
+}
+
+.google-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    transition: background-color 0.3s;
+}
+
+.google-btn i {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.google-btn img {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.google-btn:hover {
+    background-color: #f5f5f5;
+}
+
+/* Sign up prompt */
+.signup-prompt {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.sign-up-link {
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.sign-up-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-card {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-panel {
+        display: none;
+    }
+
+    .right-panel {
+        padding: 30px 20px;
+    }
+}
+
+/* Add these styles to your existing CSS */
+
+.error-message {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-left: 3px solid #d32f2f;
+}
+
+.sign-in-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
