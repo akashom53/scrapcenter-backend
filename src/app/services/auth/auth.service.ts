@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { ApiService } from '../core/services/api.service';
+import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 // Define interfaces for type safety
@@ -37,9 +37,9 @@ interface ApiError {
 })
 export class AuthService {
   private readonly AUTH_ENDPOINT = '/auth';
-  
+
   constructor(private apiService: ApiService) { }
-  
+
   /**
    * Authenticates a user with email and password
    * @param email User's email address
@@ -51,13 +51,13 @@ export class AuthService {
     if (!email || !this.isValidEmail(email)) {
       return throwError(() => new Error('Please enter a valid email address'));
     }
-    
+
     if (!password || password.length < 6) {
       return throwError(() => new Error('Password must be at least 6 characters'));
     }
-    
+
     const loginData: LoginRequest = { email, password };
-    
+
     return this.apiService.post<LoginResponse>(`${this.AUTH_ENDPOINT}/login`, loginData)
       .pipe(
         tap(response => {
@@ -69,21 +69,21 @@ export class AuthService {
         catchError((error: HttpErrorResponse) => {
           // Log error if not already logged elsewhere
           console.error('Login failed:', error);
-          
+
           // Format error message for UI display
           let errorMessage = 'Authentication failed';
-          
+
           if (error.error && typeof error.error === 'object') {
             const apiError = error.error as ApiError;
             errorMessage = apiError.message || errorMessage;
           }
-          
+
           // Propagate error for UI handling
           return throwError(() => new Error(errorMessage));
         })
       );
   }
-  
+
   /**
    * Registers a new user with email, password, and name
    * @param email User's email address
@@ -96,14 +96,14 @@ export class AuthService {
     if (!email || !this.isValidEmail(email)) {
       return throwError(() => new Error('Please enter a valid email address'));
     }
-    
+
     if (!password || password.length < 6) {
       return throwError(() => new Error('Password must be at least 6 characters'));
     }
-    
+
     // Name can be optional in the UI, but we'll pass whatever is provided
     const signupData: SignupRequest = { email, password, name };
-    
+
     return this.apiService.post<SignupResponse>(`${this.AUTH_ENDPOINT}/signup`, signupData)
       .pipe(
         tap(response => {
@@ -113,21 +113,21 @@ export class AuthService {
         catchError((error: HttpErrorResponse) => {
           // Log error if not already logged elsewhere
           console.error('Signup failed:', error);
-          
+
           // Format error message for UI display
           let errorMessage = 'Registration failed';
-          
+
           if (error.error && typeof error.error === 'object') {
             const apiError = error.error as ApiError;
             errorMessage = apiError.message || errorMessage;
           }
-          
+
           // Propagate error for UI handling
           return throwError(() => new Error(errorMessage));
         })
       );
   }
-  
+
   /**
    * Validates email format using regex
    * @param email Email to validate
