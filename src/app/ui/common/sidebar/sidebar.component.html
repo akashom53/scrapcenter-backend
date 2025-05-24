@@ -1,0 +1,10 @@
+<nav class="sidebar">
+    <ul class="nav-menu">
+        <li *ngFor="let item of navItems" class="nav-item" [ngClass]="{'active': item.active}">
+            <a (click)="handleNavClick(item)">
+                <i class="{{ item.icon }}"></i>
+                <span>{{ item.title }}</span>
+            </a>
+        </li>
+    </ul>
+</nav>

@@ -32,7 +32,8 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="password-input">
-                            <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" placeholder="Enter your password">
+                            <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password"
+                                name="password" placeholder="Enter your password">
                             <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
                                 <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                             </button>
@@ -47,9 +48,9 @@
                         <a href="#" class="forgot-password">Forgot Password</a>
                     </div>
 
-                    <button type="submit" class="sign-in-btn" [disabled]="isLoading">
-                        <span *ngIf="!isLoading">Sign In</span>
-                        <span *ngIf="isLoading">Signing in...</span>
+                    <button type="submit" class="sign-in-btn" [disabled]="isLoading()">
+                        <span *ngIf="!(isLoading())">Sign In</span>
+                        <span *ngIf="isLoading()">Signing in...</span>
                     </button>
 
                     <button type="button" class="google-btn" (click)="loginWithGoogle()">
@@ -59,7 +60,7 @@
                 </form>
 
                 <div class="signup-prompt">
-                    Don't have an account? <a href="#" class="sign-up-link">Sign Up</a>
+                    Don't have an account? <a href="/signup" class="sign-up-link">Sign Up</a>
                 </div>
             </div>
         </div>

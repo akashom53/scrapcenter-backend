@@ -4,12 +4,12 @@ import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 // Define interfaces for type safety
-interface LoginRequest {
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   access_token: string;
 }
 
@@ -46,19 +46,19 @@ export class AuthService {
    * @param password User's password
    * @returns Observable with login response containing access token
    */
-  login(email: string, password: string, shouldRedirect = true): Observable<LoginResponse> {
+  login(req: LoginRequest, shouldRedirect = true): Observable<LoginResponse> {
     // Validate inputs
-    if (!email || !this.isValidEmail(email)) {
+    if (!(req.email) || !this.isValidEmail(req.email)) {
       return throwError(() => new Error('Please enter a valid email address'));
     }
 
-    if (!password || password.length < 6) {
+    if (!(req.password) || req.password.length < 6) {
       return throwError(() => new Error('Password must be at least 6 characters'));
     }
 
-    const loginData: LoginRequest = { email, password };
+    // const loginData: LoginRequest = { email, password };
 
-    return this.apiService.post<LoginResponse>(`${this.AUTH_ENDPOINT}/login`, loginData, shouldRedirect)
+    return this.apiService.post<LoginResponse>(`${this.AUTH_ENDPOINT}/login`, req, shouldRedirect)
       .pipe(
         tap(response => {
           // Store token in localStorage or a token service
@@ -104,7 +104,7 @@ export class AuthService {
     // Name can be optional in the UI, but we'll pass whatever is provided
     const signupData: SignupRequest = { email, password, name };
 
-    return this.apiService.post<SignupResponse>(`${this.AUTH_ENDPOINT}/signup`, signupData)
+    return this.apiService.post<SignupResponse>(`users`, signupData)
       .pipe(
         tap(response => {
           // You could automatically log the user in here if desired

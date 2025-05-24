@@ -1,3 +1,128 @@
-<!-- Add this anywhere in the template -->
-<button (click)="logout()">Log Out</button>
-<p>home works!</p>
+<div class="dashboard-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="logo-container">
+            <span class="logo">ScrapCentre</span>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-button">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div class="user-menu">
+            <div class="notifications">
+                <i class="fa fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+            <div class="user-profile" (click)="toggleUserDropdown()">
+                <i class="fa-solid fa-user"></i>
+                <!-- <img src="https://via.placeholder.com/40" alt="User Profile" class="avatar"> -->
+                <span class="username">John Doe</span>
+                <i class="fa fa-chevron-down"></i>
+                <div class="dropdown-menu" *ngIf="showUserDropdown">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#" (click)="logout()">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Left Sidebar Navigation -->
+        <app-sidebar></app-sidebar>
+
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <div class="actions">
+                    <button class="primary-button">
+                        <i class="fa fa-plus"></i> New Scrap Request
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa fa-car"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>3</h3>
+                        <p>Active Requests</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>12</h3>
+                        <p>Completed Scraps</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>£2,450</h3>
+                        <p>Total Earnings</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-requests">
+                <div class="section-header">
+                    <h2>Recent Scrap Requests</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Registration</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ford Focus (2015)</td>
+                                <td>AB12 CDE</td>
+                                <td>12 Jun 2023</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td>
+                                    <button class="action-button">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vauxhall Corsa (2010)</td>
+                                <td>XY34 ZAB</td>
+                                <td>05 Jun 2023</td>
+                                <td><span class="status-badge in-progress">In Progress</span></td>
+                                <td>
+                                    <button class="action-button">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BMW 3 Series (2012)</td>
+                                <td>CD56 EFG</td>
+                                <td>28 May 2023</td>
+                                <td><span class="status-badge completed">Completed</span></td>
+                                <td>
+                                    <button class="action-button">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

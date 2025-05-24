@@ -1,0 +1,51 @@
+.sidebar {
+    width: 240px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    padding: 20px 0;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 4px;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.nav-item a i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Updated accent color to match Scrap Centre website */
+.nav-item.active a {
+    background-color: #f0f7ff;
+    color: #e64717;
+    /* Updated to orange accent color */
+    border-left-color: #e61717;
+    /* Updated to orange accent color */
+    font-weight: 500;
+}
+
+.nav-item:hover a {
+    background-color: #f5f7fa;
+    color: #333;
+}

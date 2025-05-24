@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
+import { AuthStore } from '../../../auth/state/auth.store';
+import { AppStore } from '../../../state/app.store';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,9 @@ export class LoginComponent implements OnInit {
   rememberMe: boolean = false;
   showPassword: boolean = false;
   errorMessage: string = '';
-  isLoading: boolean = false;
+  private readonly authStore = inject(AuthStore)
+  private readonly appStore = inject(AppStore)
+  isLoading = this.appStore.isLoading;
 
   constructor(private router: Router, private authService: AuthService) { }
 
@@ -27,28 +31,29 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.errorMessage = '';
-    this.isLoading = true;
+    // this.isLoading = true;
 
     // Basic validation
     if (!this.email || !this.password) {
       this.errorMessage = 'Please enter both email and password';
-      this.isLoading = false;
+      // this.isLoading = false;
       return;
     }
 
-    this.authService.login(this.email, this.password, false).subscribe({
-      next: (response) => {
-        console.log('Login successful', response);
-        this.isLoading = false;
-        // Navigate to home page after successful login
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        console.error('Login error', error);
-        this.errorMessage = error.message || 'Login failed. Please try again.';
-        this.isLoading = false;
-      }
-    });
+    this.authStore.login({ email: this.email, password: this.password });
+    // this.authService.login(this.email, this.password, false).subscribe({
+    //   next: (response) => {
+    //     console.log('Login successful', response);
+    //     this.isLoading = false;
+    //     // Navigate to home page after successful login
+    //     this.router.navigate(['/home']);
+    //   },
+    //   error: (error) => {
+    //     console.error('Login error', error);
+    //     this.errorMessage = error.message || 'Login failed. Please try again.';
+    //     this.isLoading = false;
+    //   }
+    // });
   }
 
   loginWithGoogle(): void {
