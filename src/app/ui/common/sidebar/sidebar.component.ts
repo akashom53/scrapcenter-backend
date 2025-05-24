@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthStore } from '../../../auth/state/auth.store';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,9 +9,8 @@ import { AuthService } from '../../../services/auth/auth.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  constructor(private authService: AuthService) {
+  private authStore = inject(AuthStore)
 
-  }
 
   navItems = [
     { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.emptyHandler.bind(this) },
@@ -36,7 +35,7 @@ export class SidebarComponent {
     const confirmLogout = confirm('Are you sure you want to logout?');
 
     if (confirmLogout) {
-      this.authService.logout();
+      this.authStore.logout();
     } else {
       // Reset the active state if user cancels logout
       this.navItems.forEach(item => {

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../../services/auth/auth.service';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../../auth/auth.service';
 import { NgIf } from '@angular/common';
 import { SidebarComponent } from "../../common/sidebar/sidebar.component";
+import { AuthStore } from '../../../auth/state/auth.store';
 
 @Component({
   imports: [NgIf, SidebarComponent],
@@ -11,6 +12,7 @@ import { SidebarComponent } from "../../common/sidebar/sidebar.component";
 })
 export class HomeComponent {
   showUserDropdown = false;
+  private authStore = inject(AuthStore)
 
   constructor(private authService: AuthService) { }
 
@@ -19,6 +21,6 @@ export class HomeComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.authStore.logout();
   }
 }

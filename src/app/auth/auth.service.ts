@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
-import { ApiService } from '../../core/services/api.service';
+import { ApiService } from '../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthStore } from './state/auth.store';
 
 // Define interfaces for type safety
 export interface LoginRequest {
@@ -155,8 +156,5 @@ export class AuthService {
     );
   }
 
-  logout(): void {
-    localStorage.removeItem('access_token');
-    window.location.reload();
-  }
+
 }

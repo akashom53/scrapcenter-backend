@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService } from '../../../auth/auth.service';
 import { AuthStore } from '../../../auth/state/auth.store';
 import { AppStore } from '../../../state/app.store';
 

@@ -1,6 +1,6 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
-import { AuthService, LoginRequest } from "../../services/auth/auth.service";
+import { AuthService, LoginRequest } from "../auth.service";
 import { finalize, pipe, switchMap, tap } from "rxjs";
 import { effect, inject } from "@angular/core";
 import { tapResponse } from '@ngrx/operators'
@@ -28,16 +28,15 @@ export const AuthStore = signalStore(
         store,
         authService = inject(AuthService),
         snackbar = inject(MatSnackBar),
-        router = inject(Router),
         appStore = inject(AppStore)) => {
         effect(() => {
             const isAuth = store.isAuthenticated;
             if (!isAuth()) {
                 localStorage.removeItem('access_token');
                 patchState(store, initialAuthState)
-                router.navigate(['/login']);
+                appStore.navigate('/login');
             } else {
-                router.navigate(['/home']);
+                appStore.navigate('/home');
             }
         })
         return ({
@@ -67,7 +66,10 @@ export const AuthStore = signalStore(
                         )
                     ),
                 )
-            )
+            ),
+            logout: () => {
+                patchState(store, initialAuthState);
+            }
         })
     }
     ),
