@@ -38,9 +38,9 @@
 /* Updated accent color to match Scrap Centre website */
 .nav-item.active a {
     background-color: #f0f7ff;
-    color: #e64717;
+    color: var(--mdc-theme-primary);
     /* Updated to orange accent color */
-    border-left-color: #e61717;
+    border-left-color: var(--mdc-theme-primary);
     /* Updated to orange accent color */
     font-weight: 500;
 }

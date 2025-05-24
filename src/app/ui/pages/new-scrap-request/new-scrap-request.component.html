@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1>New Scrap Request</h1>
         <div class="actions">
-            <button class="secondary-button">
+            <button class="secondary-button" (click)="handleBack()">
                 <i class="fa fa-arrow-left"></i> Back to Dashboard
             </button>
         </div>
@@ -14,75 +14,140 @@
                 <h2>Vehicle Information</h2>
                 <p>Please provide details about the vehicle you want to scrap</p>
             </div>
-            
-            <form class="scrap-request-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="vehicleType">Vehicle Type</label>
-                        <select id="vehicleType" name="vehicleType" class="form-control">
-                            <option value="">Select vehicle type</option>
-                            <option value="car">Car</option>
-                            <option value="van">Van</option>
-                            <option value="truck">Truck</option>
-                            <option value="motorcycle">Motorcycle</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicleMake">Make</label>
-                        <input type="text" id="vehicleMake" name="vehicleMake" class="form-control" placeholder="e.g. Ford, BMW, Toyota" />
-                    </div>
-                </div>
 
+            <form [formGroup]="scrapRequestForm" (ngSubmit)="onSubmit()" class="scrap-request-form">
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="vehicleModel">Model</label>
-                        <input type="text" id="vehicleModel" name="vehicleModel" class="form-control" placeholder="e.g. Focus, X3, Corolla" />
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicleYear">Year</label>
-                        <input type="number" id="vehicleYear" name="vehicleYear" class="form-control" min="1900" max="2024" placeholder="e.g. 2015" />
-                    </div>
+                    <mat-form-field class="form-group">
+                        <mat-label>Vehicle Type</mat-label>
+                        <mat-select formControlName="vehicleType">
+                            <mat-option value="">Select vehicle type</mat-option>
+                            <mat-option *ngFor="let type of vehicleTypes" [value]="type.value">
+                                {{ type.label }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="hasError('vehicleType', 'required')">
+                            {{ getErrorMessage('vehicleType') }}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="form-group">
+                        <mat-label>Make/Brand</mat-label>
+                        <input matInput formControlName="make" placeholder="e.g. Ford, BMW, Toyota">
+                        <mat-error *ngIf="hasError('make', 'required')">
+                            {{ getErrorMessage('make') }}
+                        </mat-error>
+                    </mat-form-field>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="registrationNumber">Registration Number</label>
-                        <input type="text" id="registrationNumber" name="registrationNumber" class="form-control" placeholder="e.g. AB12 CDE" />
+                    <mat-form-field class="form-group">
+                        <mat-label>Model</mat-label>
+                        <input matInput formControlName="model" placeholder="e.g. Focus, X3, Corolla">
+                        <mat-error *ngIf="hasError('model', 'required')">
+                            {{ getErrorMessage('model') }}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="form-group">
+                        <mat-label>Year</mat-label>
+                        <input matInput type="number" formControlName="year" placeholder="e.g. 2015">
+                        <mat-error
+                            *ngIf="scrapRequestForm.get('year')?.errors && scrapRequestForm.get('year')?.touched">
+                            {{ getErrorMessage('year') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field class="form-group">
+                        <mat-label>Registration Number</mat-label>
+                        <input matInput formControlName="registration" placeholder="e.g. AB12 CDE">
+                    </mat-form-field>
+
+                    <mat-form-field class="form-group">
+                        <mat-label>Vehicle Condition</mat-label>
+                        <mat-select formControlName="condition">
+                            <mat-option value="">Select condition</mat-option>
+                            <mat-option *ngFor="let condition of vehicleConditions" [value]="condition.value">
+                                {{ condition.label }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="hasError('condition', 'required')">
+                            {{ getErrorMessage('condition') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Vehicle Images Upload Section -->
+                <div class="form-group">
+                    <label for="vehicleImages">Vehicle Images</label>
+                    <div class="file-upload-container">
+                        <input type="file" #inputImage id="vehicleImages" class="file-input" multiple accept="image/*"
+                            (change)="onFileSelected($event)" />
+                        <div class="file-upload-area" (click)="inputImage.click()">
+                            <div class="upload-icon">
+                                <mat-icon>cloud_upload</mat-icon>
+                            </div>
+                            <div class="upload-text">
+                                <p><strong>Click to upload</strong> or drag and drop</p>
+                                <p class="upload-hint">PNG, JPG, JPEG up to 10MB each (Max 5 images)</p>
+                            </div>
+                        </div>
+
+                        <!-- Display selected files -->
+                        <div class="uploaded-files" *ngIf="selectedFiles.length > 0">
+                            <div class="file-preview" *ngFor="let file of selectedFiles; let i = index">
+                                <div class="file-info">
+                                    <mat-icon>image</mat-icon>
+                                    <span class="file-name">{{ file.name }}</span>
+                                    <span class="file-size">({{ (file.size / 1024 / 1024).toFixed(2) }} MB)</span>
+                                </div>
+                                <button type="button" class="remove-file" (click)="removeFile(i)" mat-icon-button>
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Upload error message -->
+                        <div class="upload-error" *ngIf="uploadStatus.error">
+                            <mat-icon>error</mat-icon>
+                            <span>{{ uploadStatus.error }}</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="vehicleCondition">Vehicle Condition</label>
-                        <select id="vehicleCondition" name="vehicleCondition" class="form-control">
-                            <option value="">Select condition</option>
-                            <option value="running">Running</option>
-                            <option value="not-running">Not Running</option>
-                            <option value="accident-damaged">Accident Damaged</option>
-                            <option value="fire-damaged">Fire Damaged</option>
-                        </select>
-                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="vehicleLocation">Vehicle Location</label>
-                    <input type="text" id="vehicleLocation" name="vehicleLocation" class="form-control" placeholder="Full address where vehicle is located" />
-                </div>
+                <mat-form-field class="form-group full-width">
+                    <mat-label>Vehicle Location</mat-label>
+                    <input matInput formControlName="location" placeholder="Full address where vehicle is located">
+                    <mat-error *ngIf="hasError('location', 'required')">
+                        {{ getErrorMessage('location') }}
+                    </mat-error>
+                </mat-form-field>
 
-                <div class="form-group">
-                    <label for="preferredDate">Preferred Collection Date</label>
-                    <input type="date" id="preferredDate" name="preferredDate" class="form-control" />
-                </div>
+                <mat-form-field class="form-group full-width">
+                    <mat-label>Preferred Collection Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="preferredDate"
+                        placeholder="Choose a date">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
 
-                <div class="form-group">
-                    <label for="additionalNotes">Additional Notes</label>
-                    <textarea id="additionalNotes" name="additionalNotes" class="form-control" rows="4" placeholder="Any additional information about the vehicle or special requirements..."></textarea>
-                </div>
+                <mat-form-field class="form-group full-width">
+                    <mat-label>Additional Notes</mat-label>
+                    <textarea matInput formControlName="notes" rows="4"
+                        placeholder="Any additional information about the vehicle or special requirements..."></textarea>
+                </mat-form-field>
 
                 <div class="form-actions">
-                    <button type="button" class="secondary-button">
-                        <i class="fa fa-save"></i> Save as Draft
+                    <button type="button" mat-stroked-button class="secondary-button"
+                        [disabled]="uploadStatus.uploading">
+                        <mat-icon>save</mat-icon>
+                        Save as Draft
                     </button>
-                    <button type="submit" class="primary-button">
-                        <i class="fa fa-paper-plane"></i> Submit Request
+                    <button type="submit" mat-raised-button color="primary" class="primary-button"
+                        [disabled]="scrapRequestForm.invalid || uploadStatus.uploading">
+                        <mat-icon>send</mat-icon>
+                        Submit Request
                     </button>
                 </div>
             </form>
@@ -90,7 +155,7 @@
 
         <div class="info-card">
             <div class="info-header">
-                <i class="fa fa-info-circle"></i>
+                <mat-icon>info</mat-icon>
                 <h3>What happens next?</h3>
             </div>
             <div class="info-content">

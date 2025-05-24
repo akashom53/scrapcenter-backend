@@ -3,7 +3,6 @@
     flex: 1;
     padding: 24px;
     overflow-y: auto;
-    background-color: #f5f7fa;
 }
 
 .page-header {
@@ -16,7 +15,7 @@
 .page-header h1 {
     font-size: 24px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-color-primary);
     margin: 0;
 }
 
@@ -27,8 +26,8 @@
 
 /* Buttons */
 .primary-button {
-    background-color: #e67817;
-    color: white;
+    background-color: var(--color-primary) !important;
+    color: var(--text-color-inverted);
     border: none;
     border-radius: 6px;
     padding: 10px 16px;
@@ -41,13 +40,18 @@
     transition: background-color 0.2s;
 }
 
+.primary-button:disabled {
+    background-color: var(--color-disabled) !important;
+    cursor: not-allowed;
+}
+
 .primary-button:hover {
-    background-color: #d16a10;
+    background-color: var(--color-hover);
 }
 
 .secondary-button {
-    background-color: #f5f7fa;
-    color: #666;
+    background-color: var(--color-secondary) !important;
+    color: var(--text-color-inverted) !important;
     border: 1px solid #e6e9ed;
     border-radius: 6px;
     padding: 10px 16px;
@@ -61,8 +65,7 @@
 }
 
 .secondary-button:hover {
-    background-color: #e6e9ed;
-    color: #333;
+    background-color: var(--color-secondary-hover);
 }
 
 /* Form Container */
@@ -135,7 +138,7 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #e67817;
+    border-color: var(--mdc-theme-primary);
     box-shadow: 0 0 0 3px rgba(230, 120, 23, 0.1);
 }
 
@@ -146,6 +149,110 @@
 textarea.form-control {
     resize: vertical;
     min-height: 100px;
+}
+
+/* File Upload Styles */
+.file-upload-container {
+    position: relative;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-upload-area {
+    border: 2px dashed #e6e9ed;
+    border-radius: 8px;
+    padding: 32px 24px;
+    text-align: center;
+    background-color: #fafbfc;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: var(--mdc-theme-primary);
+    background-color: #fff8f0;
+}
+
+.file-upload-area.dragover {
+    border-color: var(--mdc-theme-primary);
+    background-color: #fff8f0;
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    margin-bottom: 16px;
+}
+
+.upload-icon i {
+    font-size: 48px;
+    color: var(--mdc-theme-primary);
+}
+
+.upload-text p {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.upload-hint {
+    color: #666 !important;
+    font-size: 12px !important;
+}
+
+.uploaded-files {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.file-preview {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f5f7fa;
+    border: 1px solid #e6e9ed;
+}
+
+.file-preview img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+}
+
+.file-info {
+    padding: 8px;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+.file-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.file-remove:hover {
+    background-color: var(--mdc-theme-primary);
 }
 
 .form-actions {
@@ -176,7 +283,7 @@ textarea.form-control {
 }
 
 .info-header i {
-    color: #e67817;
+    color: var(--mdc-theme-primary);
     font-size: 20px;
 }
 
@@ -202,7 +309,7 @@ textarea.form-control {
 .step-number {
     width: 32px;
     height: 32px;
-    background-color: #e67817;
+    background-color: var(--mdc-theme-primary);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -232,9 +339,13 @@ textarea.form-control {
     .form-container {
         grid-template-columns: 1fr;
     }
-    
+
     .form-row {
         grid-template-columns: 1fr;
+    }
+
+    .uploaded-files {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
 }
 
@@ -242,24 +353,32 @@ textarea.form-control {
     .main-content {
         padding: 16px;
     }
-    
+
     .page-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
-    
+
     .form-card,
     .info-card {
         padding: 16px;
     }
-    
+
     .form-actions {
         flex-direction: column;
     }
-    
+
     .primary-button,
     .secondary-button {
         justify-content: center;
+    }
+
+    .file-upload-area {
+        padding: 24px 16px;
+    }
+
+    .upload-icon i {
+        font-size: 36px;
     }
 }

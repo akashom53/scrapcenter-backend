@@ -29,6 +29,9 @@ export const AppStore = signalStore(
             },
             navigate: (route: string) => {
                 patchState(store, { route });
+            },
+            back: () => {
+                patchState(store, (oldState) => ({ route: oldState.route.slice(0, oldState.route.lastIndexOf('/')) }));
             }
         })
     })

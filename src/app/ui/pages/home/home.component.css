@@ -26,7 +26,7 @@
 
 /* Updated primary button to match Scrap Centre website */
 .primary-button {
-    background-color: #e67817;
+    background-color: var(--mdc-theme-primary);
     /* Updated to orange accent color */
     color: white;
     border: none;
@@ -42,7 +42,7 @@
 }
 
 .primary-button:hover {
-    background-color: #d16a10;
+    background-color: var(--color-hover);
     /* Darker shade of the orange accent */
 }
 
@@ -71,7 +71,7 @@
     border-radius: 12px;
     background-color: #fff8e6;
     /* Light orange background */
-    color: #e67817;
+    color: var(--mdc-theme-primary);
     /* Orange accent color */
     display: flex;
     align-items: center;
@@ -117,7 +117,7 @@
 /* Updated view-all link to match Scrap Centre website */
 .view-all {
     font-size: 14px;
-    color: #e67817;
+    color: var(--mdc-theme-primary);
     /* Orange accent color */
     text-decoration: none;
 }
@@ -164,7 +164,7 @@
 .status-badge.pending {
     background-color: #fff8e6;
     /* Light orange background */
-    color: #e67817;
+    color: var(--mdc-theme-primary);
     /* Orange accent color */
 }
 

@@ -8,6 +8,67 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* === PRIMARY COLOR PALETTE === */
+  --color-primary: #ee1d23;
+  /* Base red */
+  --color-primary-light: #f45a5e;
+  /* Lighter for hover/focus */
+  --color-primary-dark: #c4161b;
+  /* For contrast/dark text */
+
+  /* === SECONDARY / ACCENT COLORS === */
+  --color-secondary: #343a40;
+  --color-secondary-hover: #16191b;
+  /* Dark gray */
+  --color-accent: #ffc107;
+  /* Vibrant amber accent (use sparingly) */
+
+  /* === FEEDBACK / STATUS COLORS === */
+  --color-success: #2e7d32;
+  /* Dark green */
+  --color-warning: #f9a825;
+  /* Yellow/amber tone */
+  --color-error: #d32f2f;
+  /* Rich red for destructive actions */
+  --color-info: #1976d2;
+  /* Strong blue */
+
+  /* === TEXT COLORS === */
+  --text-color-primary: #212121;
+  /* Deep gray for readability */
+  --text-color-secondary: #616161;
+  /* Lighter for descriptions/hints */
+  --text-color-inverted: #ffffff;
+  /* For colored buttons/cards */
+
+  /* === BACKGROUND COLORS === */
+  --color-background: #fafafa;
+  /* Very light gray */
+  --color-surface: #ffffff;
+  /* Cards, containers */
+  --color-hover: rgb(182, 12, 18);
+  /* Primary hover state */
+  --color-focus: rgba(238, 29, 35, 0.2);
+  /* Focus ring */
+  --color-disabled: #e0e0e0;
+  --color-disabled-text: #9e9e9e;
+
+  /* === BORDERS & DIVIDERS === */
+  --color-border: #e0e0e0;
+
+  /* === SHADOWS === */
+  --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  /* === MATERIAL FORM FIELD HOOKS (Angular Material support) === */
+  --mat-form-field-focus-color: var(--color-primary);
+  --mat-form-field-hover-color: var(--color-primary);
+  --mdc-theme-primary: var(--color-primary);
+  /* For Material v3 */
+}
+
+
 html,
 body {
   margin: 0;
@@ -79,5 +140,13 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
