@@ -17,9 +17,10 @@ type AuthState = {
 }
 
 const initialAuthState: AuthState = {
-    isAuthenticated: false,
-    accessToken: '',
+    isAuthenticated: !!localStorage.getItem('access_token'),
+    accessToken: localStorage.getItem('access_token') ?? '',
 }
+
 
 export const AuthStore = signalStore(
     { providedIn: 'root' },

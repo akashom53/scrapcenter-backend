@@ -3,20 +3,31 @@ import { HomeComponent } from './ui/pages/home/home.component';
 import { LoginComponent } from './ui/pages/login/login.component';
 import { AuthGuard } from './core/auth.guard';
 import { SignupComponent } from './ui/pages/signup/signup.component';
+import { MainLayoutComponent } from './ui/common/main-layout/main-layout.component';
+import { NewScrapRequestComponent } from './ui/pages/new-scrap-request/new-scrap-request.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: HomeComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'new',
+        component: NewScrapRequestComponent,
+        canActivate: [AuthGuard]
+      },
+    ]
+  },
   {
     path: 'login',
     component: LoginComponent,
     // canActivate: [NoAuthGuard]
   },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [AuthGuard]
-  },
-  { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route redirects to home
-  { path: '**', redirectTo: '/home' } // Wildcard route for 404 handling
+  { path: '**', redirectTo: '' } // Wildcard route for 404 handling
 ];
