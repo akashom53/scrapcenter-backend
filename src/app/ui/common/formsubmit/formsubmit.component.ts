@@ -3,15 +3,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-baseform',
+  selector: 'app-formsubmit',
   imports: [
     MatButtonModule,
     MatIconModule,
   ],
-  templateUrl: './baseform.component.html',
-  styleUrl: './baseform.component.css'
+  templateUrl: './formsubmit.component.html',
+  styleUrl: './formsubmit.component.css'
 })
-export class BaseformComponent {
+export class FormSubmitComponent {
 
   @Input() isFormValid: boolean = false;
 

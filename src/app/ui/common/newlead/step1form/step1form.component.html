@@ -1,0 +1,18 @@
+<div *ngIf="showForm()" class="form-card">
+    <div class="form-header">
+        <h2>Vehicle Information</h2>
+        <p>Please provide details about the vehicle you want to scrap</p>
+    </div>
+    <app-baseform-ng [model]="model()" [fields]="fields()" [onFormChange]="onFormChange"></app-baseform-ng>
+
+
+    <app-image-picker [onFilesChanged]="onFilesChanged"></app-image-picker>
+
+    <app-formsubmit [isFormValid]="isFormValid() && images.length > 0" [onSubmitClick]="onSubmitClick"
+        (onSaveClick)="onSaveClick()"></app-formsubmit>
+
+</div>
+
+<app-submit-loader *ngIf="isSubmitting()"></app-submit-loader>
+<app-success *ngIf="isSubmitSuccess()"></app-success>
+<div *ngIf="isSubmitFailure()">Failure</div>

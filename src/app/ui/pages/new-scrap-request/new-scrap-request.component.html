@@ -9,20 +9,8 @@
     </div>
 
     <div class="form-container">
-        <div class="form-card">
-            <div class="form-header">
-                <h2>Vehicle Information</h2>
-                <p>Please provide details about the vehicle you want to scrap</p>
-            </div>
 
-            <app-baseform-ng [onFormChange]="handleFormChange"></app-baseform-ng>
-
-            <app-image-picker [onFilesChanged]="onFilesChanged"></app-image-picker>
-
-            <app-baseform [isFormValid]="isFormValid() && images.length > 0" (onSubmitClick)="onSubmitClick()"
-                (onSaveClick)="onSaveClick()"></app-baseform>
-
-        </div>
+        <app-step1form></app-step1form>
 
         <div class="info-card">
             <div class="info-header">
