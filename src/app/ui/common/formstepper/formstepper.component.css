@@ -1,0 +1,88 @@
+.info-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e6e9ed;
+}
+
+.info-header i {
+    color: var(--mdc-theme-primary);
+    font-size: 20px;
+}
+
+.info-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.active {
+    background-color: var(--mdc-theme-primary);
+    color: white;
+}
+
+
+.inactive {
+    background-color: var(--color-disabled);
+    color: #838383;
+}
+
+.step-text h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 4px 0;
+}
+
+.step-text p {
+    font-size: 10px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+
+/* Responsive Design */
+
+
+@media (max-width: 768px) {
+    .info-card {
+        padding: 16px;
+    }
+
+}

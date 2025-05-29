@@ -1,0 +1,15 @@
+<div class="info-card">
+    <div class="info-header">
+        <mat-icon>info</mat-icon>
+        <h3>How does this work?</h3>
+    </div>
+    <div class="info-content">
+        <div *ngFor="let step of steps; let i = index" class="info-step">
+            <div class="step-number {{i==0?'active': 'inactive'}}">{{i+1}}</div>
+            <div class="step-text">
+                <h4>{{step.title}}</h4>
+                <p>{{step.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>
