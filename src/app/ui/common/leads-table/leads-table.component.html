@@ -1,0 +1,26 @@
+<div class="recent-requests">
+    <div *ngIf="headerData" class="section-header">
+        <h2>{{headerData.title}}</h2>
+        <a class="view-all" (click)="headerData.btnAction()">{{headerData.btnText}}</a>
+    </div>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th *ngFor="let head of columns">{{head}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let lead of getDisplayLeads();">
+                    <td>{{lead.vehicle}}</td>
+                    <td>{{lead.registration}}</td>
+                    <td>{{lead.date}}</td>
+                    <td><span class="status-badge {{lead.status?.toLowerCase()}}">{{lead.status}}</span></td>
+                    <td>
+                        <button class="action-button">View</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

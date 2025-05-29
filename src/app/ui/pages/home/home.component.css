@@ -118,7 +118,7 @@
 .view-all {
     font-size: 14px;
     color: var(--mdc-theme-primary);
-    /* Orange accent color */
+    cursor: pointer;
     text-decoration: none;
 }
 

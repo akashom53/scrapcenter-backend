@@ -5,6 +5,7 @@ import { AuthGuard } from './core/auth.guard';
 import { SignupComponent } from './ui/pages/signup/signup.component';
 import { MainLayoutComponent } from './ui/common/main-layout/main-layout.component';
 import { NewScrapRequestComponent } from './ui/pages/new-scrap-request/new-scrap-request.component';
+import { LeadsListComponent } from './ui/pages/leads-list/leads-list.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,11 @@ export const routes: Routes = [
         component: NewScrapRequestComponent,
         canActivate: [AuthGuard]
       },
+      {
+        path: 'leads',
+        component: LeadsListComponent,
+        canActivate: [AuthGuard]
+      }
     ]
   },
   {

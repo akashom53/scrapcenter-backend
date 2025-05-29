@@ -1,4 +1,4 @@
-<div>
+<div class="main-content">
     <div class="page-header">
         <h1>Dashboard</h1>
         <div class="actions">
@@ -38,52 +38,5 @@
         </div>
     </div>
 
-    <div class="recent-requests">
-        <div class="section-header">
-            <h2>Recent Scrap Requests</h2>
-            <a href="#" class="view-all">View All</a>
-        </div>
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Vehicle</th>
-                        <th>Registration</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Ford Focus (2015)</td>
-                        <td>AB12 CDE</td>
-                        <td>12 Jun 2023</td>
-                        <td><span class="status-badge pending">Pending</span></td>
-                        <td>
-                            <button class="action-button">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Vauxhall Corsa (2010)</td>
-                        <td>XY34 ZAB</td>
-                        <td>05 Jun 2023</td>
-                        <td><span class="status-badge in-progress">In Progress</span></td>
-                        <td>
-                            <button class="action-button">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>BMW 3 Series (2012)</td>
-                        <td>CD56 EFG</td>
-                        <td>28 May 2023</td>
-                        <td><span class="status-badge completed">Completed</span></td>
-                        <td>
-                            <button class="action-button">View</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <app-leads-table [leads]="leads" [headerData]="header"></app-leads-table>
 </div>

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
 import { AuthStore } from '../../../auth/state/auth.store';
+import { AppStore } from '../../../state/app.store';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,12 +11,12 @@ import { AuthStore } from '../../../auth/state/auth.store';
 })
 export class SidebarComponent {
   private authStore = inject(AuthStore)
+  private appStore = inject(AppStore)
 
 
   navItems = [
-    { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.emptyHandler.bind(this) },
-    { title: 'My Vehicles', icon: 'fa fa-car', active: false, handler: this.emptyHandler.bind(this) },
-    { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.emptyHandler.bind(this) },
+    { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.handleDashboardClick.bind(this) },
+    { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.handleScrapRequestClick.bind(this) },
     { title: 'History', icon: 'fa fa-history', active: false, handler: this.emptyHandler.bind(this) },
     { title: 'Help & Support', icon: 'fa fa-question-circle', active: false, handler: this.emptyHandler.bind(this) },
     { title: 'Logout', icon: 'fa fa-sign-out', active: false, handler: this.logoutHandler.bind(this) }
@@ -30,6 +31,12 @@ export class SidebarComponent {
     });
   }
 
+  private handleScrapRequestClick() {
+    this.appStore.navigate('/leads')
+  }
+  private handleDashboardClick() {
+    this.appStore.navigate('/')
+  }
   private logoutHandler() {
     // Show confirmation dialog before logging out
     const confirmLogout = confirm('Are you sure you want to logout?');

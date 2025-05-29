@@ -15,6 +15,7 @@
 
 .nav-item {
     margin-bottom: 4px;
+    cursor: pointer;
 }
 
 .nav-item a {

@@ -65,14 +65,14 @@ export class Step1formComponent {
     this.leadsService.newLead(this.formConfig.model, this.images).pipe(
       tapResponse(
         (res) => {
-          console.log("res");
+          console.log(res);
           this.isSubmitting.set(false);
           this.isSubmitSuccess.set(true);
           this.isSubmitFailure.set(false);
 
         },
         (err) => {
-          console.log("err");
+          console.log(err);
           this.isSubmitting.set(false);
           this.isSubmitSuccess.set(false);
           this.isSubmitFailure.set(true);

@@ -4,6 +4,18 @@ import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 // Define interfaces based on the Prisma model
+
+export interface LeadsUpdateStatus {
+  id: number;
+  createdAt: string;
+  stepName: string;
+  oldStatus: string;
+  newStatus: string;
+  files: string[];
+  isComplete: boolean;
+  leadId: number;
+}
+
 export interface Lead {
   id?: number;              // Optional for creation
   createdAt?: Date;         // Optional for creation
@@ -18,6 +30,7 @@ export interface Lead {
   additionalNotes?: string; // Optional
   status?: string;          // Optional, defaults to "Pending"
   userId?: number;          // Optional
+  statusUpdates: LeadsUpdateStatus[];
 }
 
 // For create operations
