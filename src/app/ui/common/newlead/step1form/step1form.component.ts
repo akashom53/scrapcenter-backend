@@ -9,10 +9,11 @@ import { CommonModule } from '@angular/common';
 import { Step1Form } from './step1form.form';
 import { SubmitLoaderComponent } from "../../loaders/submit-loader/submit-loader.component";
 import { SuccessComponent } from "../../success/success.component";
+import { FailureComponent } from "../../failure/failure.component";
 
 @Component({
   selector: 'app-step1form',
-  imports: [BaseformNgComponent, ImagePickerComponent, FormSubmitComponent, CommonModule, SubmitLoaderComponent, SuccessComponent],
+  imports: [BaseformNgComponent, ImagePickerComponent, FormSubmitComponent, CommonModule, SubmitLoaderComponent, SuccessComponent, FailureComponent],
   templateUrl: './step1form.component.html',
   styleUrl: './step1form.component.css'
 })
@@ -29,7 +30,7 @@ export class Step1formComponent {
   isFormValid = signal(false);
 
   isSubmitting = signal(false);
-  isSubmitSuccess = signal(true);
+  isSubmitSuccess = signal(false);
   isSubmitFailure = signal(false);
 
   showForm: Signal<boolean> = computed(() => {

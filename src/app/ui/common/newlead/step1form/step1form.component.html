@@ -15,4 +15,4 @@
 
 <app-submit-loader *ngIf="isSubmitting()"></app-submit-loader>
 <app-success *ngIf="isSubmitSuccess()"></app-success>
-<div *ngIf="isSubmitFailure()">Failure</div>
+<app-failure *ngIf="isSubmitFailure()">Failure</app-failure>

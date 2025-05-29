@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-success',
+  selector: 'app-failure',
   imports: [MatIconModule],
-  templateUrl: './success.component.html',
-  styleUrl: './success.component.css'
+  templateUrl: './failure.component.html',
+  styleUrl: './failure.component.css'
 })
-export class SuccessComponent {
+export class FailureComponent {
 
 }
