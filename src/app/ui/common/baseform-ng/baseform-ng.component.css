@@ -1,0 +1,9 @@
+::ng-deep .two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+::ng-deep .full-width {
+    grid-column: span 2;
+}

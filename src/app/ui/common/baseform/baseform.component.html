@@ -1,0 +1,14 @@
+<div class="scrap-request-form">
+
+    <div class="form-actions">
+        <button type="button" mat-stroked-button class="secondary-button" [disabled]="false" (click)="onSaveClick()">
+            <mat-icon>save</mat-icon>
+            Save as Draft
+        </button>
+        <button type="submit" mat-raised-button color="primary" class="primary-button" [disabled]="(!isFormValid)"
+            (click)="onSubmitClick()">
+            <mat-icon>send</mat-icon>
+            Submit Request
+        </button>
+    </div>
+</div>

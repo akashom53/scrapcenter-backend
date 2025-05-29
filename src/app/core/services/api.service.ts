@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig, AxiosHeaders } from 'axios';
 import { Observable, from } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -78,9 +78,9 @@ export class ApiService {
     private createRequestConfig(useAuth?: boolean, redirectOnUnauth?: boolean): AxiosRequestConfig {
         // If useAuth is explicitly set, use it; otherwise use the instance setting
         const shouldUseAuth = useAuth !== undefined ? useAuth : this.useAuthHeader;
-        
+
         const config: AxiosRequestConfig = {};
-        
+
         // If we're explicitly disabling auth for this request when it's globally enabled,
         // we need to set a flag that our interceptor can check
         if (this.useAuthHeader && !shouldUseAuth) {
@@ -94,7 +94,7 @@ export class ApiService {
             // Use a custom header to pass this information to our interceptor
             config.headers['X-Redirect-On-Unauthorized'] = redirectOnUnauth ? 'true' : 'false';
         }
-        
+
         return config;
     }
 
@@ -111,9 +111,29 @@ export class ApiService {
         );
     }
 
-    post<T>(url: string, data: any, useAuth?: boolean, redirectOnUnauth?: boolean): Observable<T> {
+    post<T>(url: string, data: any, useAuth?: boolean, redirectOnUnauth?: boolean, headers?: any): Observable<T> {
+        const config = this.createRequestConfig(useAuth, redirectOnUnauth);
+        if (headers) {
+            Object.keys(headers).forEach(key => {
+                config.headers![key] = headers[key];
+            });
+        }
         return from(
-            this.axiosInstance.post<T>(url, data, this.createRequestConfig(useAuth, redirectOnUnauth))
+            this.axiosInstance.post<T>(url, data, config)
+                .then((response: AxiosResponse<T>) => response.data)
+                .catch(this.handleError)
+        );
+    }
+
+    postForm<T>(url: string, data: FormData, useAuth?: boolean, redirectOnUnauth?: boolean, headers?: any): Observable<T> {
+        const config = this.createRequestConfig(useAuth, redirectOnUnauth);
+        if (headers) {
+            Object.keys(headers).forEach(key => {
+                config.headers![key] = headers[key];
+            });
+        }
+        return from(
+            this.axiosInstance.post<T>(url, data, config)
                 .then((response: AxiosResponse<T>) => response.data)
                 .catch(this.handleError)
         );
@@ -140,7 +160,7 @@ export class ApiService {
         if (data) {
             config.data = data;
         }
-        
+
         return from(
             this.axiosInstance.delete<T>(url, config)
                 .then((response: AxiosResponse<T>) => response.data)

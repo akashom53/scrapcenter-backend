@@ -8,11 +8,8 @@ export interface Lead {
   id?: number;              // Optional for creation
   createdAt?: Date;         // Optional for creation
   updatedAt?: Date;         // Optional for creation
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
   vehicleMake: string;
+  vehicleRegistration: string;
   vehicleModel: string;
   vehicleYear: number;
   vehicleMileage: number;
@@ -25,10 +22,7 @@ export interface Lead {
 
 // For create operations
 export interface CreateLeadDto {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
+  vehicleRegistration: string;
   vehicleMake: string;
   vehicleModel: string;
   vehicleYear: number;
@@ -41,10 +35,7 @@ export interface CreateLeadDto {
 
 // For update operations
 export interface UpdateLeadDto {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  phone?: string;
+  vehicleRegistration?: string;
   vehicleMake?: string;
   vehicleModel?: string;
   vehicleYear?: number;
@@ -118,13 +109,34 @@ export class LeadsService {
   /**
    * Create a new lead
    * @param leadData Lead data to create
+   * @param images Array of image files to upload
    * @returns Observable with created lead
    */
-  createLead(leadData: CreateLeadDto): Observable<Lead> {
+  newLead(leadData: CreateLeadDto, images: File[]): Observable<Lead> {
+    console.log('Lead data:', leadData);
+    console.log('Images:', images);
     // Validate required fields
     this.validateLeadData(leadData);
 
-    return this.apiService.post<Lead>(this.LEADS_ENDPOINT, leadData)
+    // Create FormData object
+    const formData = new FormData();
+
+    // Append lead data as JSON string
+    Object.keys(leadData).forEach(key => {
+      formData.append(key, leadData[key as keyof CreateLeadDto] as string);
+    }); // Dodaj ovu liniju da se prikazuje log oba
+
+    // Append each image file
+    if (images && images.length > 0) {
+      images.forEach((image, index) => {
+        formData.append('images', image, image.name);
+      });
+    }
+    for (let e of formData.entries()) {
+      console.log(e);
+    }
+    // Send the request to the specific endpoint
+    return this.apiService.postForm<Lead>(`${this.LEADS_ENDPOINT}/new`, formData, true, true, { 'Content-Type': 'multipart/form-data' })
       .pipe(
         catchError(this.handleError)
       );
@@ -175,8 +187,7 @@ export class LeadsService {
    */
   private validateLeadData(leadData: CreateLeadDto): void {
     const requiredFields = [
-      'firstName', 'lastName', 'email', 'phone',
-      'vehicleMake', 'vehicleModel', 'vehicleYear',
+      'vehicleRegistration', 'vehicleMake', 'vehicleModel', 'vehicleYear',
       'vehicleMileage', 'vehicleCondition', 'vehicleLocation'
     ];
 
@@ -186,18 +197,6 @@ export class LeadsService {
 
     if (missingFields.length > 0) {
       throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-    }
-
-    // Validate email format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(leadData.email)) {
-      throw new Error('Please enter a valid email address');
-    }
-
-    // Validate phone format (basic validation)
-    const phoneRegex = /^[0-9\-\+\s()]{10,15}$/;
-    if (!phoneRegex.test(leadData.phone)) {
-      throw new Error('Please enter a valid phone number');
     }
 
     // Validate year is reasonable
