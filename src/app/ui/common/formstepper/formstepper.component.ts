@@ -2,7 +2,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Component, computed, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Lead, LeadStatus, LeadsUpdateStatus } from '../../../models/lead.model';
-// 'submit_data' | 'review_data' | 'gen_cert_1' | 'await_submission' | 'complete'
+
 const baseStep = [
   {
     title: 'Submit Vehicle Data',
@@ -53,6 +53,7 @@ export class FormstepperComponent {
   stepData = computed(() => this.generateStepData().map(this.addClassesForStep));
 
 
+
   addClassesForStep = (step: StepData) => {
     return {
       ...step,
@@ -61,6 +62,15 @@ export class FormstepperComponent {
   }
 
   generateStepData = (): StepData[] => {
+    if (!this.lead) {
+      return baseStep.map(step => {
+        return {
+          ...step,
+          isComplete: false,
+          progress: step.key === 'submit_data',
+        }
+      });
+    }
     if (this.showDetailsSteps) {
       const flatUpdates = this.lead.statusUpdates.map(update => {
         return {
