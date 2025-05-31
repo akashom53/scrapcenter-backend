@@ -5,7 +5,12 @@
     </div>
     <div class="info-content">
         <div *ngFor="let step of stepData(); let i = index" class="info-step">
-            <div class="step-number {{step.statusClass}}">{{i+1}}</div>
+            <div class="step-number {{step.statusClass}}">
+                <span *ngIf="!step.isComplete">{{i+1}}</span>
+                <div *ngIf="step.isComplete" class="icon-container">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            </div>
             <div class="step-text">
                 <h4>{{step.title}}</h4>
                 <p>{{step.description}}</p>

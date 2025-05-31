@@ -42,7 +42,7 @@ type StepData = {
 
 @Component({
   selector: 'app-formstepper',
-  imports: [MatIconModule, NgFor],
+  imports: [MatIconModule, NgFor, CommonModule],
   templateUrl: './formstepper.component.html',
   styleUrl: './formstepper.component.css'
 })
