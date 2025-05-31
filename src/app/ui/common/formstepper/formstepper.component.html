@@ -13,7 +13,14 @@
             </div>
             <div class="step-text">
                 <h4>{{step.title}}</h4>
-                <p>{{step.description}}</p>
+                <p *ngIf="!step.updates?.length">{{step.description}}</p>
+
+                <div *ngIf="step.updates?.length" class="step-updates">
+                    <div class="updates-container" *ngFor="let update of step.updates">
+                        <div class="update-date">{{update.createdAt}}</div>
+                        <div class="update-title">{{update.title}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

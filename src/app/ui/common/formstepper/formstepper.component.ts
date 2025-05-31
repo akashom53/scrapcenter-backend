@@ -37,7 +37,7 @@ type StepData = {
   key: LeadStatus;
   isComplete: boolean;
   progress: boolean;
-  updates?: { title: LeadStatus; createdAt: string; isComplete: boolean; }[];
+  updates?: { title: string; createdAt: string; isComplete: boolean; }[];
 }
 
 @Component({
@@ -61,6 +61,34 @@ export class FormstepperComponent {
     }
   }
 
+  getUpdateTitle = (update: LeadsUpdateStatus) => {
+    switch (update.stepName) {
+      case 'submit_data':
+        return update.isComplete ? 'Vehicle Data Submitted' : 'Vehicle Data Submitted';
+      case 'review_data':
+        return update.isComplete ? 'Review Started' : 'Review Completed';
+      case 'gen_cert_1':
+        return update.isComplete ? 'Generating Certificate 1' : 'Certificate 1 Generated';
+      case 'await_submission':
+        return update.isComplete ? 'Waiting for Vehicle Submission' : 'Vehicle Submitted';
+      case 'complete':
+        return update.isComplete ? 'Completed' : 'Completed';
+      default:
+        return update.stepName;
+    }
+  }
+
+  getUpdateDateTime = (update: LeadsUpdateStatus) => {
+    // format: 12 Dec 2024, 12:00 PM
+    return new Date(update.createdAt).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    });
+  }
+
   generateStepData = (): StepData[] => {
     if (!this.lead) {
       return baseStep.map(step => {
@@ -72,15 +100,16 @@ export class FormstepperComponent {
       });
     }
     if (this.showDetailsSteps) {
-      const flatUpdates = this.lead.statusUpdates.map(update => {
+      const flatUpdates = this.lead.statusUpdates.reverse().map(update => {
         return {
-          title: update.stepName,
-          createdAt: update.createdAt,
+          key: update.stepName,
+          title: this.getUpdateTitle(update),
+          createdAt: this.getUpdateDateTime(update),
           isComplete: update.isComplete,
         }
       })
-      const detaiedUpdates = baseStep.map(step => {
-        const update = flatUpdates.filter(update => update.title === step.key);
+      const detailedUpdates = baseStep.map(step => {
+        const update = flatUpdates.filter(update => update.key === step.key);
         return {
           ...step,
           updates: update,
@@ -89,17 +118,17 @@ export class FormstepperComponent {
         }
       })
       let lastCompleteIndex = -1
-      for (let i = detaiedUpdates.length - 1; i >= 0; i--) {
-        if (detaiedUpdates[i].isComplete) {
+      for (let i = detailedUpdates.length - 1; i >= 0; i--) {
+        if (detailedUpdates[i].isComplete) {
           lastCompleteIndex = i;
           break;
         }
       }
-      if (lastCompleteIndex !== -1 && lastCompleteIndex < detaiedUpdates.length - 1) {
-        detaiedUpdates[lastCompleteIndex + 1].progress = true;
+      if (lastCompleteIndex !== -1 && lastCompleteIndex < detailedUpdates.length - 1) {
+        detailedUpdates[lastCompleteIndex + 1].progress = true;
       }
 
-      return detaiedUpdates;
+      return detailedUpdates;
     } else {
       const currentStep = this.lead.getCurrentStatus();
       return baseStep.map(step => {

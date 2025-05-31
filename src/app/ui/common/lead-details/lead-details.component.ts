@@ -14,6 +14,29 @@ import { MatDividerModule } from '@angular/material/divider';
 export class LeadDetailsComponent {
     @Input() lead?: Lead;
 
+    getDisplayData = () => {
+        if (!this.lead) return []
+        return Object.keys(this.lead!).filter((key) => !([
+            'statusUpdates',
+            'id',
+            'createdAt',
+            'updatedAt',
+            'userId',
+            'status',
+            'currentStatus',
+            'currentStatusClass',
+            'additionalNotes',
+        ].includes(key))).map((key) => {
+            return {
+                key: this.getKeyLabel(key), value: this.lead![key as keyof Lead]
+            }
+        })
+    }
+
+    getKeyLabel = (key: string) => {
+        return key.replace('vehicle', '').replace(/([A-Z])/g, ' $1').trim().replace(/^\w/, c => c.toUpperCase());
+    }
+
     getLeadStatus = (lead: Lead): { status: string, class: string } => {
         return lead.getCurrentStatus();
     }

@@ -35,12 +35,14 @@ export class Lead {
 
     // Helper method to get current status information
     getCurrentStatus(): { status: string, class: string, stepKey: LeadStatus } {
+        console.log(this.statusUpdates);
         if ((this.statusUpdates?.length ?? 0) <= 0) {
             return { status: 'Data not submitted', class: 'pending', stepKey: 'submit_data' };
         }
         const lastUpdate = this.statusUpdates[this.statusUpdates.length - 1];
         switch (lastUpdate.stepName) {
             case 'submit_data':
+                console.log('last', lastUpdate.isComplete, this);
                 if (lastUpdate.isComplete) {
                     return { status: 'Data Submitted', class: 'in-progress', stepKey: 'submit_data' };
                 } else {
