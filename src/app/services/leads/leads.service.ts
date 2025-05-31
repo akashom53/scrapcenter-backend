@@ -1,74 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError, map } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
-// Define interfaces based on the Prisma model
-
-export interface LeadsUpdateStatus {
-  id: number;
-  createdAt: string;
-  stepName: string;
-  oldStatus: string;
-  newStatus: string;
-  files: string[];
-  isComplete: boolean;
-  leadId: number;
-}
-
-export interface Lead {
-  id?: number;              // Optional for creation
-  createdAt?: Date;         // Optional for creation
-  updatedAt?: Date;         // Optional for creation
-  vehicleMake: string;
-  vehicleRegistration: string;
-  vehicleModel: string;
-  vehicleYear: number;
-  vehicleMileage: number;
-  vehicleCondition: string;
-  vehicleLocation: string;
-  additionalNotes?: string; // Optional
-  status?: string;          // Optional, defaults to "Pending"
-  userId?: number;          // Optional
-  statusUpdates: LeadsUpdateStatus[];
-}
-
-// For create operations
-export interface CreateLeadDto {
-  vehicleRegistration: string;
-  vehicleMake: string;
-  vehicleModel: string;
-  vehicleYear: number;
-  vehicleMileage: number;
-  vehicleCondition: string;
-  vehicleLocation: string;
-  additionalNotes?: string;
-  userId?: number;
-}
-
-// For update operations
-export interface UpdateLeadDto {
-  vehicleRegistration?: string;
-  vehicleMake?: string;
-  vehicleModel?: string;
-  vehicleYear?: number;
-  vehicleMileage?: number;
-  vehicleCondition?: string;
-  vehicleLocation?: string;
-  additionalNotes?: string;
-  status?: string;
-  userId?: number;
-}
-
-// For filtering/querying leads
-export interface LeadFilters {
-  status?: string;
-  vehicleMake?: string;
-  vehicleModel?: string;
-  fromDate?: Date;
-  toDate?: Date;
-  userId?: number;
-}
+import { Lead, LeadStatus, LeadsUpdateStatus, CreateLeadDto, UpdateLeadDto, LeadFilters } from '../../models/lead.model';
 
 @Injectable({
   providedIn: 'root'
@@ -101,8 +35,9 @@ export class LeadsService {
       queryParams = params.toString() ? `?${params.toString()}` : '';
     }
 
-    return this.apiService.get<Lead[]>(`${this.LEADS_ENDPOINT}${queryParams}`)
+    return this.apiService.get<any[]>(`${this.LEADS_ENDPOINT}${queryParams}`)
       .pipe(
+        map(data => data.map(item => Lead.fromApiData(item))),
         catchError(this.handleError)
       );
   }
@@ -113,8 +48,9 @@ export class LeadsService {
    * @returns Observable with lead details
    */
   getLead(id: number): Observable<Lead> {
-    return this.apiService.get<Lead>(`${this.LEADS_ENDPOINT}/${id}`)
+    return this.apiService.get<any>(`${this.LEADS_ENDPOINT}/${id}`)
       .pipe(
+        map(data => Lead.fromApiData(data)),
         catchError(this.handleError)
       );
   }
@@ -149,8 +85,9 @@ export class LeadsService {
       console.log(e);
     }
     // Send the request to the specific endpoint
-    return this.apiService.postForm<Lead>(`${this.LEADS_ENDPOINT}/new`, formData, true, true, { 'Content-Type': 'multipart/form-data' })
+    return this.apiService.postForm<any>(`${this.LEADS_ENDPOINT}/new`, formData, true, true, { 'Content-Type': 'multipart/form-data' })
       .pipe(
+        map(data => Lead.fromApiData(data)),
         catchError(this.handleError)
       );
   }
@@ -162,8 +99,9 @@ export class LeadsService {
    * @returns Observable with updated lead
    */
   updateLead(id: number, leadData: UpdateLeadDto): Observable<Lead> {
-    return this.apiService.put<Lead>(`${this.LEADS_ENDPOINT}/${id}`, leadData)
+    return this.apiService.put<any>(`${this.LEADS_ENDPOINT}/${id}`, leadData)
       .pipe(
+        map(data => Lead.fromApiData(data)),
         catchError(this.handleError)
       );
   }
@@ -175,8 +113,9 @@ export class LeadsService {
    * @returns Observable with updated lead
    */
   updateLeadStatus(id: number, status: string): Observable<Lead> {
-    return this.apiService.patch<Lead>(`${this.LEADS_ENDPOINT}/${id}/status`, { status })
+    return this.apiService.patch<any>(`${this.LEADS_ENDPOINT}/${id}/status`, { status })
       .pipe(
+        map(data => Lead.fromApiData(data)),
         catchError(this.handleError)
       );
   }

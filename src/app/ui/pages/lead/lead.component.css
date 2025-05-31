@@ -1,0 +1,14 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.lead-details {
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.form-stepper {
+    max-width: 400px;
+    margin-top: 20px;
+}

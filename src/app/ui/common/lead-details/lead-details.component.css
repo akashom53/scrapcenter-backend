@@ -1,0 +1,72 @@
+.lead-details-card {
+    margin: 20px;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.lead-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.detail-item {
+    padding: 10px;
+}
+
+.detail-item h3 {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 8px 0;
+    font-weight: 500;
+}
+
+.detail-item p {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.divider {
+    margin: 20px 0;
+}
+
+.dates-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pending {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.in-progress {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+
+.completed {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}

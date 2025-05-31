@@ -1,6 +1,7 @@
-import { Component, computed, Input, Signal } from '@angular/core';
-import { Lead } from '../../../services/leads/leads.service';
+import { Component, computed, inject, Input, Signal } from '@angular/core';
+import { Lead } from '../../../models/lead.model';
 import { CommonModule, NgIf } from '@angular/common';
+import { AppStore } from '../../../state/app.store';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class LeadsTableComponent {
   @Input() handleRefreshClick?: () => void;
   @Input() headerData?: { title: string, btnText: string, btnAction: () => void };
 
+  private readonly appStore = inject(AppStore);
 
   // displayLeads = computed(() => this.leads.map((lead) => this.getLeadData(lead)));
   columns = [
@@ -32,11 +34,16 @@ export class LeadsTableComponent {
   }
   getLeadData = (lead: Lead) => {
     return {
-      vehicle: `${lead.vehicleMake} ${lead.vehicleModel}`,
+      vehicle: lead.getVehicleDisplayName(),
       registration: lead.vehicleRegistration,
-      date: this.dateString(lead.createdAt),
-      status: lead.status,
+      date: lead.getFormattedCreatedDate(),
+      status: lead.getCurrentStatus(),
+      lead: lead
     }
+  }
+
+  getLeadStatus = (lead: Lead): { status: string, class: string } => {
+    return lead.getCurrentStatus();
   }
 
   dateString = (date?: Date) => {
@@ -50,6 +57,11 @@ export class LeadsTableComponent {
     if (this.handleRefreshClick) {
       this.handleRefreshClick();
     }
+  }
+
+
+  handleViewClick(lead: Lead) {
+    this.appStore.navigate(`/lead/${lead.id}`);
   }
 
 }

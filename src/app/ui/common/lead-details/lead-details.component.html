@@ -1,0 +1,63 @@
+<mat-card *ngIf="lead" class="lead-details-card">
+    <mat-card-header class="lead-details-header">
+        <mat-card-title>Vehicle Details</mat-card-title>
+        <!-- <mat-card-subtitle> -->
+        <span class="status-badge" [ngClass]="getLeadStatus(lead).class">
+            {{getLeadStatus(lead).status}}
+        </span>
+        <!-- </mat-card-subtitle> -->
+    </mat-card-header>
+
+    <mat-card-content>
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>Make & Model</h3>
+                <p>{{lead.vehicleMake}} {{lead.vehicleModel}}</p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Registration</h3>
+                <p>{{lead.vehicleRegistration}}</p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Year</h3>
+                <p>{{lead.vehicleYear}}</p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Mileage</h3>
+                <p>{{lead.vehicleMileage}} km</p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Condition</h3>
+                <p>{{lead.vehicleCondition}}</p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Location</h3>
+                <p>{{lead.vehicleLocation}}</p>
+            </div>
+
+            <div class="detail-item full-width" *ngIf="lead.additionalNotes">
+                <h3>Additional Notes</h3>
+                <p>{{lead.additionalNotes}}</p>
+            </div>
+
+            <!-- <mat-divider class="divider"></mat-divider> -->
+
+            <!-- <div class="dates-section"> -->
+            <div class="detail-item">
+                <h3>Created</h3>
+                <p>{{formatDate(lead.createdAt)}}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Last Updated</h3>
+                <p>{{formatDate(lead.updatedAt)}}</p>
+            </div>
+
+        </div>
+        <!-- </div> -->
+    </mat-card-content>
+</mat-card>

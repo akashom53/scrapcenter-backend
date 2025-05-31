@@ -15,9 +15,9 @@
                     <td>{{lead.vehicle}}</td>
                     <td>{{lead.registration}}</td>
                     <td>{{lead.date}}</td>
-                    <td><span class="status-badge {{lead.status?.toLowerCase()}}">{{lead.status}}</span></td>
+                    <td><span class="status-badge {{lead.status.class}}">{{lead.status.status}}</span></td>
                     <td>
-                        <button class="action-button">View</button>
+                        <button class="action-button" (click)="handleViewClick(lead.lead)">View</button>
                     </td>
                 </tr>
             </tbody>

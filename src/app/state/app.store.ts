@@ -1,7 +1,8 @@
 import { effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { Lead, LeadsService } from '../services/leads/leads.service';
+import { Lead } from '../models/lead.model';
+import { LeadsService } from '../services/leads/leads.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';

@@ -51,15 +51,20 @@
     flex-shrink: 0;
 }
 
-.active {
-    background-color: var(--mdc-theme-primary);
+.completed {
+    background-color: var(--color-success);
     color: white;
 }
 
 
-.inactive {
+.pending {
     background-color: var(--color-disabled);
     color: #838383;
+}
+
+.in-progress {
+    background-color: var(--mdc-theme-primary);
+    color: white;
 }
 
 .step-text h4 {
