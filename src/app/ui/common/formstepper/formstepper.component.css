@@ -93,12 +93,35 @@
 .updates-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    gap: 12px;
+    align-items: start;
+    gap: 4em;
 }
 
 .update-date {
     font-weight: 600;
+}
+
+.update-title-files-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5em;
+}
+
+.update-files-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2em;
+    cursor: pointer;
+}
+
+.update-file-name {
+    margin-left: 0.5em;
+}
+
+.update-file-name:hover {
+    text-decoration: underline;
 }
 
 .update-title {

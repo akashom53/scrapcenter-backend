@@ -37,7 +37,12 @@ type StepData = {
   key: LeadStatus;
   isComplete: boolean;
   progress: boolean;
-  updates?: { title: string; createdAt: string; isComplete: boolean; }[];
+  updates?: {
+    title: string; createdAt: string; isComplete: boolean; files?: {
+      path: string;
+      name: string;
+    }[]
+  }[];
 }
 
 @Component({
@@ -53,6 +58,9 @@ export class FormstepperComponent {
   stepData = computed(() => this.generateStepData().map(this.addClassesForStep));
 
 
+  openFile = (file: string) => {
+    window.open(file, '_blank');
+  }
 
   addClassesForStep = (step: StepData) => {
     return {
@@ -106,6 +114,10 @@ export class FormstepperComponent {
           title: this.getUpdateTitle(update),
           createdAt: this.getUpdateDateTime(update),
           isComplete: update.isComplete,
+          files: update.files.map((file, i) => ({
+            path: `http://localhost:3000/uploads/${file}`,
+            name: `File ${i + 1}`,
+          })),
         }
       })
       const detailedUpdates = baseStep.map(step => {

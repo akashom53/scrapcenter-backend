@@ -18,7 +18,16 @@
                 <div *ngIf="step.updates?.length" class="step-updates">
                     <div class="updates-container" *ngFor="let update of step.updates">
                         <div class="update-date">{{update.createdAt}}</div>
-                        <div class="update-title">{{update.title}}</div>
+                        <div class="update-title-files-container">
+                            <div class="update-title">{{update.title}}</div>
+                            <div class="update-files-container">
+                                <div (click)="openFile(file.path)" class="update-files"
+                                    *ngFor="let file of update.files">
+                                    <i class="fa-solid fa-file"></i>
+                                    <span class="update-file-name">{{file.name}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
