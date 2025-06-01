@@ -2,6 +2,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Component, computed, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Lead, LeadStatus, LeadsUpdateStatus } from '../../../models/lead.model';
+import { UpdateFormComponent } from "../update-form/update-form.component";
 
 const baseStep = [
   {
@@ -31,14 +32,17 @@ const baseStep = [
   },
 ]
 
-type StepData = {
+export type StepData = {
   title: string;
   description: string;
   key: LeadStatus;
   isComplete: boolean;
   progress: boolean;
   updates?: {
-    title: string; createdAt: string; isComplete: boolean; files?: {
+    title: string;
+    createdAt: string;
+    isComplete: boolean;
+    files?: {
       path: string;
       name: string;
     }[]
@@ -47,7 +51,7 @@ type StepData = {
 
 @Component({
   selector: 'app-formstepper',
-  imports: [MatIconModule, NgFor, CommonModule],
+  imports: [MatIconModule, NgFor, CommonModule, UpdateFormComponent],
   templateUrl: './formstepper.component.html',
   styleUrl: './formstepper.component.css'
 })

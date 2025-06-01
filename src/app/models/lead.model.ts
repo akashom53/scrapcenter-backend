@@ -34,42 +34,42 @@ export class Lead {
     }
 
     // Helper method to get current status information
-    getCurrentStatus(): { status: string, class: string, stepKey: LeadStatus } {
+    getCurrentStatus(): { status: string, class: string, stepKey: LeadStatus, isComplete: boolean } {
         console.log(this.statusUpdates);
         if ((this.statusUpdates?.length ?? 0) <= 0) {
-            return { status: 'Data not submitted', class: 'pending', stepKey: 'submit_data' };
+            return { status: 'Data not submitted', class: 'pending', stepKey: 'submit_data', isComplete: false };
         }
         const lastUpdate = this.statusUpdates[this.statusUpdates.length - 1];
         switch (lastUpdate.stepName) {
             case 'submit_data':
                 console.log('last', lastUpdate.isComplete, this);
                 if (lastUpdate.isComplete) {
-                    return { status: 'Data Submitted', class: 'in-progress', stepKey: 'submit_data' };
+                    return { status: 'Data Submitted', class: 'in-progress', stepKey: 'submit_data', isComplete: true };
                 } else {
-                    return { status: 'Data not submitted', class: 'pending', stepKey: 'submit_data' };
+                    return { status: 'Data not submitted', class: 'pending', stepKey: 'submit_data', isComplete: false };
                 }
             case 'review_data':
                 if (lastUpdate.isComplete) {
-                    return { status: "Request Approved", class: 'in-progress', stepKey: 'review_data' };
+                    return { status: "Request Approved", class: 'in-progress', stepKey: 'review_data', isComplete: true };
                 } else {
-                    return { status: 'Under Review', class: 'in-progress', stepKey: 'review_data' };
+                    return { status: 'Under Review', class: 'in-progress', stepKey: 'review_data', isComplete: false };
                 }
             case 'gen_cert_1':
                 if (lastUpdate.isComplete) {
-                    return { status: 'Certificate Generated', class: 'in-progress', stepKey: 'gen_cert_1' };
+                    return { status: 'Certificate Generated', class: 'in-progress', stepKey: 'gen_cert_1', isComplete: true };
                 } else {
-                    return { status: "Generating Certificate", class: 'in-progress', stepKey: 'gen_cert_1' };
+                    return { status: "Generating Certificate", class: 'in-progress', stepKey: 'gen_cert_1', isComplete: false };
                 }
             case 'await_submission':
                 if (lastUpdate.isComplete) {
-                    return { status: 'Vehicle Submitted', class: 'completed', stepKey: 'await_submission' };
+                    return { status: 'Vehicle Submitted', class: 'completed', stepKey: 'await_submission', isComplete: true };
                 } else {
-                    return { status: "Awaiting Vehicle Submission", class: 'in-progress', stepKey: 'await_submission' };
+                    return { status: "Awaiting Vehicle Submission", class: 'in-progress', stepKey: 'await_submission', isComplete: false };
                 }
             case 'complete':
-                return { status: 'Complete', class: 'completed', stepKey: 'complete' };
+                return { status: 'Complete', class: 'completed', stepKey: 'complete', isComplete: true };
             default:
-                return { status: 'Unknown', class: 'pending', stepKey: 'submit_data' };
+                return { status: 'Unknown', class: 'pending', stepKey: 'submit_data', isComplete: false };
         }
     }
 
