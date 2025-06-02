@@ -1,0 +1,43 @@
+<div class="recent-requests">
+    <div class="section-header">
+        <h2>Users Management</h2>
+    </div>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Admin</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users()">
+                    <td>{{user.email}}</td>
+                    <td>
+                        <span *ngIf="user.name; else noName">{{user.name}}</span>
+                        <ng-template #noName>
+                            <span class="no-name">—</span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <span class="status-badge" [class]="user.isAdmin ? 'admin' : 'user'">
+                            {{user.isAdmin ? 'Admin' : 'User'}}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge" [class]="user.isApproved ? 'approved' : 'pending'">
+                            {{user.isApproved ? 'Approved' : 'Pending'}}
+                        </span>
+                    </td>
+                    <td>
+                        <button *ngFor="let action of getActions(user)" class="action-button edit-button"
+                            (click)="action.action(user)">{{action.label}}</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

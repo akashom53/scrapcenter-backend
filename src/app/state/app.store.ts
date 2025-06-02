@@ -6,11 +6,13 @@ import { LeadsService } from '../services/leads/leads.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { User, UsersService } from '../services/users.service';
 
 type AppState = {
     isLoading: boolean;
     route: string;
-    leads: Lead[]
+    leads: Lead[];
+    users: User[];
 }
 
 
@@ -18,6 +20,7 @@ const initialAppState: AppState = {
     isLoading: false,
     route: '',
     leads: [],
+    users: [],
 }
 
 
@@ -29,6 +32,7 @@ export const AppStore = signalStore(
         store,
         router = inject(Router),
         leadsService = inject(LeadsService),
+        usersService = inject(UsersService),
     ) => {
         effect(() => {
             router.navigate([store.route()]);
@@ -63,6 +67,70 @@ export const AppStore = signalStore(
                                     });
                                     patchState(store, { leads, isLoading: false });
                                     console.log(leads);
+                                },
+                                error: (err) => {
+                                    patchState(store, { isLoading: false });
+                                    console.error(err);
+                                },
+                            })
+                        )
+                    ),
+                )
+            ),
+            fetchUsers: rxMethod<void>(
+                pipe(
+                    tap(() => {
+                        patchState(store, { isLoading: true });
+                    }),
+                    switchMap(() => usersService.getAllUsers()
+                        .pipe(
+                            tapResponse({
+                                next: (users) => {
+                                    patchState(store, { users, isLoading: false });
+                                },
+                                error: (err) => {
+                                    patchState(store, { isLoading: false });
+                                    console.error(err);
+                                },
+                            })
+                        )
+                    ),
+                )
+            ),
+            setAdmin: rxMethod<User>(
+                pipe(
+                    tap(() => {
+                        patchState(store, { isLoading: true });
+                    }),
+                    switchMap((user) => usersService.updateUser(user.id, {
+                        isAdmin: true,
+                    })
+                        .pipe(
+                            tapResponse({
+                                next: (user) => {
+                                    patchState(store, { users: store.users().map(u => u.id === user.id ? user : u) });
+                                },
+                                error: (err) => {
+                                    patchState(store, { isLoading: false });
+                                    console.error(err);
+                                },
+                            })
+                        )
+                    ),
+                )
+            ),
+            setApproved: rxMethod<User>(
+                pipe(
+                    tap(() => {
+                        patchState(store, { isLoading: true });
+                    }),
+                    switchMap((user) => usersService.updateUser(user.id, {
+                        isApproved: true,
+                    })
+                        .pipe(
+                            tapResponse({
+                                next: (user) => {
+                                    patchState(store, { users: store.users().map(u => u.id === user.id ? user : u) });
                                 },
                                 error: (err) => {
                                     patchState(store, { isLoading: false });

@@ -7,6 +7,7 @@ import { MainLayoutComponent } from './ui/common/main-layout/main-layout.compone
 import { NewScrapRequestComponent } from './ui/pages/new-scrap-request/new-scrap-request.component';
 import { LeadsListComponent } from './ui/pages/leads-list/leads-list.component';
 import { LeadComponent } from './ui/pages/lead/lead.component';
+import { UsersComponent } from './ui/pages/users/users.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,11 @@ export const routes: Routes = [
       {
         path: 'lead/:id',
         component: LeadComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
         canActivate: [AuthGuard]
       }
     ]

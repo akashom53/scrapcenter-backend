@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit } from '@angular/core';
 import { Lead } from '../../../models/lead.model';
 import { NgIf } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +36,7 @@ export class UpdateFormComponent implements OnInit {
   model!: any;
   fields!: FormlyFieldConfig[]
   actions!: any
+  showActions = computed(() => Object.keys(this.actions).length > 0);
 
   private leadsService = inject(LeadsService);
 

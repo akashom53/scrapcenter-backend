@@ -1,7 +1,8 @@
 <div *ngIf="isAdmin" class="update-form-container">
     <!-- add ng formly, taking json input from ts -->
     <formly-form [model]="model" [fields]="fields" (modelChange)="onModelChange()"></formly-form>
-    <button type="submit" mat-raised-button color="primary" class="primary-button" (click)="actions.onClick()">
+    <button *ngIf="showActions()" type="submit" mat-raised-button color="primary" class="primary-button"
+        (click)="actions.onClick()">
         <mat-icon>send</mat-icon>
         {{actions.title}}
     </button>

@@ -17,6 +17,7 @@ export class SidebarComponent {
   navItems = [
     { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.handleDashboardClick.bind(this) },
     { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.handleScrapRequestClick.bind(this) },
+    { title: 'Users', icon: 'fa fa-user', active: false, handler: this.handleUserClick.bind(this) },
     { title: 'History', icon: 'fa fa-history', active: false, handler: this.emptyHandler.bind(this) },
     { title: 'Help & Support', icon: 'fa fa-question-circle', active: false, handler: this.emptyHandler.bind(this) },
     { title: 'Logout', icon: 'fa fa-sign-out', active: false, handler: this.logoutHandler.bind(this) }
@@ -29,6 +30,10 @@ export class SidebarComponent {
         navItem.handler!();
       }
     });
+  }
+
+  private handleUserClick() {
+    this.appStore.navigate('/users')
   }
 
   private handleScrapRequestClick() {
