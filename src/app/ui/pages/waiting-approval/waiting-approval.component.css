@@ -1,0 +1,191 @@
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    background-color: var(--color-background);
+}
+
+.approval-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    width: 100%;
+}
+
+.approval-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e6e9ed;
+}
+
+.approval-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--color-warning);
+    margin-bottom: 16px;
+}
+
+.approval-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.approval-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.primary-message {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    text-align: center;
+    margin: 0;
+}
+
+.info-section,
+.contact-section {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--color-info);
+}
+
+.info-section h3,
+.contact-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+}
+
+.info-section p,
+.contact-section p {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+}
+
+.info-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.info-section li {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.contact-item mat-icon {
+    color: var(--color-primary);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contact-link {
+    font-size: 14px;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+.actions-section {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+    border-top: 1px solid #e6e9ed;
+}
+
+.secondary-button {
+    background-color: var(--color-secondary);
+    color: var(--text-color-inverted);
+    border: 1px solid #e6e9ed;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.secondary-button:hover {
+    background-color: var(--color-secondary-hover);
+}
+
+.secondary-button mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 16px;
+    }
+
+    .approval-card {
+        padding: 24px;
+    }
+
+    .approval-header h2 {
+        font-size: 20px;
+    }
+
+    .approval-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .info-section,
+    .contact-section {
+        padding: 16px;
+    }
+}

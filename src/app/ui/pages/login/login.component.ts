@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   private readonly authStore = inject(AuthStore)
   private readonly appStore = inject(AppStore)
   isLoading = this.appStore.isLoading;
+  computedError = computed(() => this.authStore.error());
 
   constructor(private router: Router, private authService: AuthService) { }
 

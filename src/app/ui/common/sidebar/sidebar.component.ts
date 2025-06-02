@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+
+import { Component, computed, inject } from '@angular/core';
 import { NgFor, NgClass } from '@angular/common';
 import { AuthStore } from '../../../auth/state/auth.store';
 import { AppStore } from '../../../state/app.store';
@@ -12,19 +13,28 @@ import { AppStore } from '../../../state/app.store';
 export class SidebarComponent {
   private authStore = inject(AuthStore)
   private appStore = inject(AppStore)
+  navItems = computed<{ title: string; icon: string; active: boolean, handler: () => void }[]>(() => {
+    const isAdmin = this.authStore.isAdmin();
 
+    if (isAdmin) return [
+      { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.handleDashboardClick.bind(this) },
+      { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.handleScrapRequestClick.bind(this) },
+      { title: 'Users', icon: 'fa fa-user', active: false, handler: this.handleUserClick.bind(this) },
+      { title: 'History', icon: 'fa fa-history', active: false, handler: this.emptyHandler.bind(this) },
+      { title: 'Help & Support', icon: 'fa fa-question-circle', active: false, handler: this.emptyHandler.bind(this) },
+      { title: 'Logout', icon: 'fa fa-sign-out', active: false, handler: this.logoutHandler.bind(this) }
+    ]
 
-  navItems = [
-    { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.handleDashboardClick.bind(this) },
-    { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.handleScrapRequestClick.bind(this) },
-    { title: 'Users', icon: 'fa fa-user', active: false, handler: this.handleUserClick.bind(this) },
-    { title: 'History', icon: 'fa fa-history', active: false, handler: this.emptyHandler.bind(this) },
-    { title: 'Help & Support', icon: 'fa fa-question-circle', active: false, handler: this.emptyHandler.bind(this) },
-    { title: 'Logout', icon: 'fa fa-sign-out', active: false, handler: this.logoutHandler.bind(this) }
-  ];
+    return [
+      { title: 'Dashboard', icon: 'fa fa-home', active: true, handler: this.handleDashboardClick.bind(this) },
+      { title: 'Scrap Requests', icon: 'fa fa-file-text', active: false, handler: this.handleScrapRequestClick.bind(this) },
+      { title: 'Help & Support', icon: 'fa fa-question-circle', active: false, handler: this.emptyHandler.bind(this) },
+      { title: 'Logout', icon: 'fa fa-sign-out', active: false, handler: this.logoutHandler.bind(this) }
+    ]
+  })
 
   handleNavClick(item: { title: string; icon: string; active: boolean, handler: () => void }) {
-    this.navItems.forEach((navItem) => {
+    this.navItems().forEach((navItem) => {
       navItem.active = navItem.title === item.title;
       if (navItem.active) {
         navItem.handler!();
@@ -50,7 +60,7 @@ export class SidebarComponent {
       this.authStore.logout();
     } else {
       // Reset the active state if user cancels logout
-      this.navItems.forEach(item => {
+      this.navItems().forEach(item => {
         if (item.title === 'Logout') {
           item.active = false;
         }

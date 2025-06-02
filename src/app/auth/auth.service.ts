@@ -3,6 +3,7 @@ import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { ApiService } from '../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthStore } from './state/auth.store';
+import { User } from '../services/users.service';
 
 // Define interfaces for type safety
 export interface LoginRequest {
@@ -12,6 +13,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   access_token: string;
+  user: User;
 }
 
 interface SignupRequest {

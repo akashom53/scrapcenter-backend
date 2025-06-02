@@ -1,12 +1,13 @@
-import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
+import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { AuthService, LoginRequest } from "../auth.service";
 import { finalize, pipe, switchMap, tap } from "rxjs";
-import { effect, inject } from "@angular/core";
+import { computed, effect, inject } from "@angular/core";
 import { tapResponse } from '@ngrx/operators'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppStore } from "../../state/app.store";
 import { Router } from "@angular/router";
+import { User } from "../../services/users.service";
 
 
 
@@ -14,17 +15,31 @@ import { Router } from "@angular/router";
 type AuthState = {
     isAuthenticated: boolean;
     accessToken: string;
+    user: User | null;
+    error: string | null;
 }
 
 const initialAuthState: AuthState = {
     isAuthenticated: !!localStorage.getItem('access_token'),
     accessToken: localStorage.getItem('access_token') ?? '',
+    user: null,
+    error: null,
 }
 
+const emptyAuthState: AuthState = {
+    isAuthenticated: false,
+    accessToken: '',
+    user: null,
+    error: null,
+}
 
 export const AuthStore = signalStore(
     { providedIn: 'root' },
     withState(initialAuthState),
+    withComputed((store) => ({
+        isAdmin: computed(() => store.user()?.isAdmin ?? false),
+        isApproved: computed(() => store.user()?.isApproved ?? false),
+    })),
     withMethods((
         store,
         authService = inject(AuthService),
@@ -34,7 +49,7 @@ export const AuthStore = signalStore(
             const isAuth = store.isAuthenticated;
             if (!isAuth()) {
                 localStorage.removeItem('access_token');
-                patchState(store, initialAuthState)
+                patchState(store, emptyAuthState)
                 appStore.navigate('/login');
             } else {
                 appStore.navigate('/home');
@@ -49,9 +64,12 @@ export const AuthStore = signalStore(
                             tapResponse({
                                 next: (response) => {
                                     patchState(store, (state) => ({
-                                        accessToken: response.access_token,
-                                        isAuthenticated: true,
+                                        isAuthenticated: response.user.isApproved,
+                                        accessToken: response.user.isApproved ? response.access_token : '',
+                                        user: response.user,
+                                        error: response.user.isApproved ? null : 'User is not approved',
                                     }));
+
                                 },
                                 error: (err) => {
                                     snackbar.open('Error Logging In', 'Close', {
@@ -61,6 +79,9 @@ export const AuthStore = signalStore(
 
                                     });
                                     console.error(err);
+                                    patchState(store, (state) => ({
+                                        error: 'Error Logging In',
+                                    }));
                                 },
                             }),
                             finalize(() => appStore.setLoading(false)),
@@ -69,7 +90,8 @@ export const AuthStore = signalStore(
                 )
             ),
             logout: () => {
-                patchState(store, initialAuthState);
+                localStorage.removeItem('access_token');
+                patchState(store, emptyAuthState);
             }
         })
     }
