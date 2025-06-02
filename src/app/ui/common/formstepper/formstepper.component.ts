@@ -78,11 +78,11 @@ export class FormstepperComponent {
       case 'submit_data':
         return update.isComplete ? 'Vehicle Data Submitted' : 'Vehicle Data Submitted';
       case 'review_data':
-        return update.isComplete ? 'Review Started' : 'Review Completed';
+        return update.isComplete ? 'Review Completed' : 'Review Started';
       case 'gen_cert_1':
-        return update.isComplete ? 'Generating Certificate 1' : 'Certificate 1 Generated';
+        return update.isComplete ? 'Certificate 1 Generated' : 'Generating Certificate 1';
       case 'await_submission':
-        return update.isComplete ? 'Waiting for Vehicle Submission' : 'Vehicle Submitted';
+        return update.isComplete ? 'Vehicle Submitted' : 'Waiting for Vehicle Submission';
       case 'complete':
         return update.isComplete ? 'Completed' : 'Completed';
       default:
@@ -143,7 +143,7 @@ export class FormstepperComponent {
       if (lastCompleteIndex !== -1 && lastCompleteIndex < detailedUpdates.length - 1) {
         detailedUpdates[lastCompleteIndex + 1].progress = true;
       }
-
+      console.log('Detailed Updates', detailedUpdates);
       return detailedUpdates;
     } else {
       const currentStep = this.lead.getCurrentStatus();

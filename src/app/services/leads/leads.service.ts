@@ -4,6 +4,15 @@ import { ApiService } from '../../core/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Lead, LeadStatus, LeadsUpdateStatus, CreateLeadDto, UpdateLeadDto, LeadFilters } from '../../models/lead.model';
 
+// Add interface for update status request
+export interface UpdateLeadStatusRequest {
+  stepName: string;
+  oldStatus: string;
+  newStatus: string;
+  isComplete: boolean;
+  createdAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -114,6 +123,47 @@ export class LeadsService {
    */
   updateLeadStatus(id: number, status: string): Observable<Lead> {
     return this.apiService.patch<any>(`${this.LEADS_ENDPOINT}/${id}/status`, { status })
+      .pipe(
+        map(data => Lead.fromApiData(data)),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Update lead status with additional data and images
+   * @param id Lead ID
+   * @param statusData Status update data
+   * @param images Array of image files to upload (optional)
+   * @returns Observable with updated lead
+   */
+  updateLeadStatusWithData(id: number, statusData: UpdateLeadStatusRequest, images?: File[]): Observable<Lead> {
+    console.log('Status update data:', statusData);
+    console.log('Images:', images);
+
+    // Create FormData object
+    const formData = new FormData();
+
+    // Append status data fields
+    formData.append('stepName', statusData.stepName);
+    formData.append('oldStatus', statusData.oldStatus);
+    formData.append('newStatus', statusData.newStatus);
+    formData.append('isComplete', statusData.isComplete.toString());
+    formData.append('createdAt', statusData.createdAt);
+
+    // Append each image file if provided
+    if (images && images.length > 0) {
+      images.forEach((image, index) => {
+        formData.append('images', image, image.name);
+      });
+    }
+
+    // Log form data for debugging
+    for (let entry of formData.entries()) {
+      console.log(entry);
+    }
+
+    // Send the request to the update-status endpoint
+    return this.apiService.postForm<any>(`${this.LEADS_ENDPOINT}/update-status/${id}`, formData, true, true, { 'Content-Type': 'multipart/form-data' })
       .pipe(
         map(data => Lead.fromApiData(data)),
         catchError(this.handleError)

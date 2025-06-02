@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Lead } from '../../../models/lead.model';
 import { NgIf } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { LeadsService, UpdateLeadStatusRequest } from '../../../services/leads/leads.service';
 
 @Component({
   selector: 'app-update-form',
@@ -35,13 +36,16 @@ export class UpdateFormComponent implements OnInit {
   model!: any;
   fields!: FormlyFieldConfig[]
   actions!: any
+
+  private leadsService = inject(LeadsService);
+
   ngOnInit(): void {
     this.configModel = this.createModel()
     this.model = this.configModel.model
     this.fields = this.configModel.fields
     this.actions = this.configModel.actions
 
-    console.log('Hello', this.model, this.fields, this.actions)
+    console.log('Helslo', this.model, this.fields, this.actions)
   }
 
   createModel() {
@@ -51,7 +55,7 @@ export class UpdateFormComponent implements OnInit {
       actions: {}
     }
     const status = this.lead.getCurrentStatus()
-    console.log('Hello', status)
+    console.log('Status', status)
     switch (status.stepKey) {
       case 'submit_data':
         return {
@@ -60,6 +64,18 @@ export class UpdateFormComponent implements OnInit {
           actions: {
             title: 'Start Review',
             onClick: () => {
+              const statusData: UpdateLeadStatusRequest = {
+                stepName: 'review_data',
+                oldStatus: 'submit_data',
+                newStatus: 'review_data',
+                isComplete: false,
+                createdAt: new Date().toISOString(),
+              }
+              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                console.log('Lead status updated successfully', response);
+              });
+
+
               console.log('start review')
             }
           }
@@ -72,7 +88,16 @@ export class UpdateFormComponent implements OnInit {
             actions: {
               title: 'Start Certificate Generation',
               onClick: () => {
-                console.log('start certificate generation')
+                const statusData: UpdateLeadStatusRequest = {
+                  stepName: 'gen_cert_1',
+                  oldStatus: 'review_data',
+                  newStatus: 'gen_cert_1',
+                  isComplete: false,
+                  createdAt: new Date().toISOString(),
+                }
+                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                  console.log('Lead status updated successfully', response);
+                });
               }
             }
           }
@@ -100,18 +125,21 @@ export class UpdateFormComponent implements OnInit {
           actions: {
             title: 'Submit Review',
             onClick: () => {
-              console.log('start review')
+              console.log('submit review')
+              const statusData: UpdateLeadStatusRequest = {
+                stepName: 'review_data',
+                oldStatus: 'review_data',
+                newStatus: 'gen_cert_1',
+                isComplete: true,
+                createdAt: new Date().toISOString(),
+              }
+              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                console.log('Lead status updated successfully', response);
+              });
             }
           }
         }
       case 'gen_cert_1':
-        if (status.isComplete) {
-          return {
-            model: {},
-            fields: [],
-            actions: {}
-          }
-        }
         return {
           model: { notes: '', cert_generated: false },
           fields: [
@@ -133,9 +161,29 @@ export class UpdateFormComponent implements OnInit {
             }
           ],
           actions: {
-            title: 'Submit',
+            title: 'Mark Cretificate Generated',
             onClick: () => {
               console.log('Certificate step completed')
+              const statusData: UpdateLeadStatusRequest = {
+                stepName: 'gen_cert_1',
+                oldStatus: 'gen_cert_1',
+                newStatus: 'await_submission',
+                isComplete: true,
+                createdAt: new Date().toISOString(),
+              }
+              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                console.log('Lead status updated successfully', response);
+                const statusData: UpdateLeadStatusRequest = {
+                  stepName: 'await_submission',
+                  oldStatus: 'gen_cert_1',
+                  newStatus: 'await_submission',
+                  isComplete: false,
+                  createdAt: new Date().toISOString(),
+                }
+                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                  console.log('Lead status updated successfully 2', response);
+                });
+              });
             }
           }
         }
@@ -143,9 +191,41 @@ export class UpdateFormComponent implements OnInit {
       case 'await_submission':
         if (status.isComplete) {
           return {
-            model: {},
-            fields: [],
-            actions: {}
+            model: { notes: '', cert_generated: false },
+            fields: [
+              {
+                key: 'notes',
+                type: 'input',
+                props: {
+                  label: 'Notes',
+                  placeholder: 'Enter any notes you have about the vehicle',
+                  required: true,
+                }
+              },
+              {
+                key: 'completed',
+                type: 'checkbox',
+                props: {
+                  label: 'Finished'
+                }
+              }
+            ],
+            actions: {
+              title: 'Mark Review Complete',
+              onClick: () => {
+                console.log('Mark review complete')
+                const statusData: UpdateLeadStatusRequest = {
+                  stepName: 'complete',
+                  oldStatus: 'complete',
+                  newStatus: 'complete',
+                  isComplete: true,
+                  createdAt: new Date().toISOString(),
+                }
+                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                  console.log('Lead status updated successfully', response);
+                });
+              }
+            }
           }
         }
         return {
@@ -169,9 +249,19 @@ export class UpdateFormComponent implements OnInit {
             }
           ],
           actions: {
-            title: 'Submit',
+            title: 'Mark Vehicle Submitted',
             onClick: () => {
               console.log('Vehicle submission step completed')
+              const statusData: UpdateLeadStatusRequest = {
+                stepName: 'await_submission',
+                oldStatus: 'await_submission',
+                newStatus: 'complete',
+                isComplete: true,
+                createdAt: new Date().toISOString(),
+              }
+              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+                console.log('Lead status updated successfully', response);
+              });
             }
           }
         }
