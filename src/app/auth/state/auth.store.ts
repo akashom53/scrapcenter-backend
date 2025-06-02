@@ -22,7 +22,7 @@ type AuthState = {
 const initialAuthState: AuthState = {
     isAuthenticated: !!localStorage.getItem('access_token'),
     accessToken: localStorage.getItem('access_token') ?? '',
-    user: null,
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
     error: null,
 }
 
@@ -38,7 +38,9 @@ export const AuthStore = signalStore(
     withState(initialAuthState),
     withComputed((store) => ({
         isAdmin: computed(() => store.user()?.isAdmin ?? false),
-        isApproved: computed(() => store.user()?.isApproved ?? false),
+        isApproved: computed(() => {
+            return store.user()?.isApproved ?? false
+        }),
     })),
     withMethods((
         store,
@@ -63,8 +65,9 @@ export const AuthStore = signalStore(
                         authService.login(request, true).pipe(
                             tapResponse({
                                 next: (response) => {
+                                    localStorage.setItem('user', JSON.stringify(response.user));
                                     patchState(store, (state) => ({
-                                        isAuthenticated: response.user.isApproved,
+                                        isAuthenticated: true,
                                         accessToken: response.user.isApproved ? response.access_token : '',
                                         user: response.user,
                                         error: response.user.isApproved ? null : 'User is not approved',
