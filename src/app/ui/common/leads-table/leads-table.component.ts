@@ -61,6 +61,7 @@ export class LeadsTableComponent {
 
 
   handleViewClick(lead: Lead) {
+    this.appStore.setCurrentLead(lead);
     this.appStore.navigate(`/lead/${lead.id}`);
   }
 

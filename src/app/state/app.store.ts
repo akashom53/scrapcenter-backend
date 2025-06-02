@@ -2,7 +2,7 @@ import { effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Lead } from '../models/lead.model';
-import { LeadsService } from '../services/leads/leads.service';
+import { LeadsService, UpdateLeadStatusRequest } from '../services/leads/leads.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
@@ -13,6 +13,7 @@ type AppState = {
     route: string;
     leads: Lead[];
     users: User[];
+    currentLead: Lead | null;
 }
 
 
@@ -21,6 +22,7 @@ const initialAppState: AppState = {
     route: '',
     leads: [],
     users: [],
+    currentLead: null,
 }
 
 
@@ -46,6 +48,15 @@ export const AppStore = signalStore(
             },
             back: () => {
                 patchState(store, (oldState) => ({ route: oldState.route.slice(0, oldState.route.lastIndexOf('/')) }));
+            },
+            setCurrentLead: (lead: Lead) => {
+                patchState(store, { currentLead: lead });
+            },
+            updateCurrentLead: (leadStatusUpdate: UpdateLeadStatusRequest) => {
+                if (!store.currentLead()) return;
+                leadsService.updateLeadStatusWithData(store.currentLead()!.id!, leadStatusUpdate).subscribe(response => {
+                    patchState(store, { currentLead: response });
+                });
             },
             fetchLeads: rxMethod<void>(
                 pipe(

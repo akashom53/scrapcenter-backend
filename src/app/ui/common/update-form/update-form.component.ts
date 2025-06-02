@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, Input, OnInit } from '@angular/core';
 import { Lead } from '../../../models/lead.model';
 import { NgIf } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +7,8 @@ import { FormlyMaterialModule } from '@ngx-formly/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LeadsService, UpdateLeadStatusRequest } from '../../../services/leads/leads.service';
+import { AppStore } from '../../../state/app.store';
+import { AuthStore } from '../../../auth/state/auth.store';
 
 @Component({
   selector: 'app-update-form',
@@ -22,9 +24,12 @@ import { LeadsService, UpdateLeadStatusRequest } from '../../../services/leads/l
   styleUrl: './update-form.component.css'
 })
 export class UpdateFormComponent implements OnInit {
-  @Input() lead!: Lead;
 
-  isAdmin = true;
+  private leadsService = inject(LeadsService);
+  private appStore = inject(AppStore);
+  private authStore = inject(AuthStore);
+
+  isAdmin = this.authStore.isAdmin;
 
   configModel!: {
     model: any,
@@ -38,24 +43,38 @@ export class UpdateFormComponent implements OnInit {
   actions!: any
   showActions = computed(() => Object.keys(this.actions).length > 0);
 
-  private leadsService = inject(LeadsService);
+  lead = this.appStore.currentLead;
 
+  constructor() {
+    effect(() => {
+      const currentLead = this.lead();
+      console.log('Current lead updated', currentLead)
+      if (currentLead) {
+        this.updateFormConfig();
+      }
+    });
+  }
   ngOnInit(): void {
-    this.configModel = this.createModel()
-    this.model = this.configModel.model
-    this.fields = this.configModel.fields
-    this.actions = this.configModel.actions
+    // Initial setup
+    this.updateFormConfig();
 
-    console.log('Helslo', this.model, this.fields, this.actions)
+
+  }
+
+  private updateFormConfig() {
+    this.configModel = this.createModel();
+    this.model = this.configModel.model;
+    this.fields = this.configModel.fields;
+    this.actions = this.configModel.actions;
   }
 
   createModel() {
-    if (!this.lead) return {
+    if (!this.lead()) return {
       model: {},
       fields: [],
       actions: {}
     }
-    const status = this.lead.getCurrentStatus()
+    const status = this.lead()!.getCurrentStatus()
     console.log('Status', status)
     switch (status.stepKey) {
       case 'submit_data':
@@ -72,7 +91,7 @@ export class UpdateFormComponent implements OnInit {
                 isComplete: false,
                 createdAt: new Date().toISOString(),
               }
-              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+              this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
                 console.log('Lead status updated successfully', response);
               });
 
@@ -96,9 +115,10 @@ export class UpdateFormComponent implements OnInit {
                   isComplete: false,
                   createdAt: new Date().toISOString(),
                 }
-                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
-                  console.log('Lead status updated successfully', response);
-                });
+                this.appStore.updateCurrentLead(statusData);
+                // this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
+                //   console.log('Lead status updated successfully', response);
+                // });
               }
             }
           }
@@ -134,9 +154,11 @@ export class UpdateFormComponent implements OnInit {
                 isComplete: true,
                 createdAt: new Date().toISOString(),
               }
-              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
-                console.log('Lead status updated successfully', response);
-              });
+
+              this.appStore.updateCurrentLead(statusData);
+              // this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
+              //   console.log('Lead status updated successfully', response);
+              // });
             }
           }
         }
@@ -172,7 +194,7 @@ export class UpdateFormComponent implements OnInit {
                 isComplete: true,
                 createdAt: new Date().toISOString(),
               }
-              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
+              this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
                 console.log('Lead status updated successfully', response);
                 const statusData: UpdateLeadStatusRequest = {
                   stepName: 'await_submission',
@@ -181,9 +203,11 @@ export class UpdateFormComponent implements OnInit {
                   isComplete: false,
                   createdAt: new Date().toISOString(),
                 }
-                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
-                  console.log('Lead status updated successfully 2', response);
-                });
+
+                this.appStore.updateCurrentLead(statusData);
+                // this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
+                //   console.log('Lead status updated successfully 2', response);
+                // });
               });
             }
           }
@@ -222,9 +246,11 @@ export class UpdateFormComponent implements OnInit {
                   isComplete: true,
                   createdAt: new Date().toISOString(),
                 }
-                this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
-                  console.log('Lead status updated successfully', response);
-                });
+
+                this.appStore.updateCurrentLead(statusData);
+                // this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
+                //   console.log('Lead status updated successfully', response);
+                // });
               }
             }
           }
@@ -260,9 +286,11 @@ export class UpdateFormComponent implements OnInit {
                 isComplete: true,
                 createdAt: new Date().toISOString(),
               }
-              this.leadsService.updateLeadStatusWithData(this.lead!.id!, statusData).subscribe(response => {
-                console.log('Lead status updated successfully', response);
-              });
+
+              this.appStore.updateCurrentLead(statusData);
+              // this.leadsService.updateLeadStatusWithData(this.lead()!.id!, statusData).subscribe(response => {
+              //   console.log('Lead status updated successfully', response);
+              // });
             }
           }
         }

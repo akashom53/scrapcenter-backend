@@ -14,12 +14,6 @@ import { NgIf } from '@angular/common';
 export class LeadComponent {
   private readonly appStore = inject(AppStore);
   private readonly route = inject(ActivatedRoute);
-  lead = computed(() => {
-    const lead = this.appStore.leads().find(lead => {
-      return lead.id?.toString() === this.route.snapshot.params['id']
-    })
-    console.log(lead)
-    return lead
-  })
+  lead = this.appStore.currentLead;
 
 }

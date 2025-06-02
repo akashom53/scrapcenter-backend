@@ -1,8 +1,8 @@
 <mat-card *ngIf="lead" class="lead-details-card">
     <mat-card-header class="lead-details-header">
         <mat-card-title>Vehicle Details</mat-card-title>
-        <span class="status-badge" [ngClass]="getLeadStatus(lead).class">
-            {{getLeadStatus(lead).status}}
+        <span class="status-badge" [ngClass]="getLeadStatus().class">
+            {{getLeadStatus().status}}
         </span>
     </mat-card-header>
 

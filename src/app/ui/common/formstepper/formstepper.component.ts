@@ -1,8 +1,9 @@
 import { CommonModule, NgFor } from '@angular/common';
-import { Component, computed, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Lead, LeadStatus, LeadsUpdateStatus } from '../../../models/lead.model';
 import { UpdateFormComponent } from "../update-form/update-form.component";
+import { AppStore } from '../../../state/app.store';
 
 const baseStep = [
   {
@@ -57,7 +58,11 @@ export type StepData = {
 })
 export class FormstepperComponent {
   @Input() title: string = 'How this works?';
-  @Input() lead!: Lead;
+
+  private readonly appStore = inject(AppStore);
+
+  lead = this.appStore.currentLead;
+
   @Input() showDetailsSteps: boolean = true;
   stepData = computed(() => this.generateStepData().map(this.addClassesForStep));
 
@@ -102,7 +107,7 @@ export class FormstepperComponent {
   }
 
   generateStepData = (): StepData[] => {
-    if (!this.lead) {
+    if (!this.lead()) {
       return baseStep.map(step => {
         return {
           ...step,
@@ -112,7 +117,7 @@ export class FormstepperComponent {
       });
     }
     if (this.showDetailsSteps) {
-      const flatUpdates = this.lead.statusUpdates.reverse().map(update => {
+      const flatUpdates = this.lead()!.statusUpdates.reverse().map(update => {
         return {
           key: update.stepName,
           title: this.getUpdateTitle(update),
@@ -146,7 +151,7 @@ export class FormstepperComponent {
       console.log('Detailed Updates', detailedUpdates);
       return detailedUpdates;
     } else {
-      const currentStep = this.lead.getCurrentStatus();
+      const currentStep = this.lead()!.getCurrentStatus();
       return baseStep.map(step => {
         return {
           ...step,
