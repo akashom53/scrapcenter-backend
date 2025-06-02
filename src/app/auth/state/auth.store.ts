@@ -54,7 +54,7 @@ export const AuthStore = signalStore(
                 patchState(store, emptyAuthState)
                 appStore.navigate('/login');
             } else {
-                appStore.navigate('/home');
+                appStore.navigate('/');
             }
         })
         return ({
